@@ -1,0 +1,47 @@
+@font-face {
+    font-family: "Ravie";
+    src: url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.eot");
+    src: url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.svg#Ravie")format("svg");
+}
+
+main {
+    padding: 2rem;
+}
+
+/* .brand {
+    color: red;
+    font-family: "Ravie";
+} */
+
+.center {
+    margin: auto;
+    width: fit-content;
+}
+
+.search-and-filter-container {
+    background-color: whitesmoke;
+    border: none;
+    border-radius: 12px;
+    padding: 1.2rem;
+}
+
+.search-and-filter-container-feilds {
+    margin: 0.2rem 0;
+} 
+
+.project-card {
+    background-color: whitesmoke;
+    border: none;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 1rem 0;
+}
+
+.project-card:hover {
+    background-color: rgb(231, 231, 231);
+    cursor: pointer;
+}

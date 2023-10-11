@@ -1,0 +1,21 @@
+@font-face {
+    font-family: "Ravie";
+    src: url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.eot");
+    src: url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.svg#Ravie")format("svg");
+}
+
+.company-name {
+    opacity: 0.6;
+}
+
+.due-by-indicator {
+    color: red;
+}
+
+.project-card img {
+    float: right;
+}
