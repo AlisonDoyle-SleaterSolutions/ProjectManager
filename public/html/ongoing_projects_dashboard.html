@@ -13,7 +13,6 @@
     <link href="./../css/ongoing_projects_dashboard.css" rel="stylesheet">
 
     <!-- Scripting -->
-    <script src="./../js/projectCards.js" type="module"></script>
 </head>
 
 <body>
@@ -23,7 +22,7 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <!-- Brand -->
-                <a class="navbar-brand brand" href="#">Sleater &AMP; Co.</a>
+                <a class="navbar-brand brand" href="./ongoing_projects_dashboard.html">Sleater &AMP; Co.</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +38,7 @@
                             <a class="nav-link" href="./archived_projects_dashboard.html">Archived Projects</a>
                         </li>
                     </ul>
-                    
+
                 </div>
             </div>
         </nav>
@@ -52,7 +51,7 @@
             <!-- Search and filter container -->
             <div class="container-fluid search-and-filter-container">
                 <div class="row">
-                    <div class="col-12 col-md-5 col-lg-5 col-xl-4">
+                    <div class="col-12 col-md-5 col-lg-4 col-xl-4">
                         <select name="filterProjects" id="ongoingProjectsFilter"
                             class="form-select search-and-filter-container-feilds">
                             <option value="">Name (A-Z)</option>
@@ -61,9 +60,14 @@
                             <option value="">Company</option>
                         </select>
                     </div>
-                    <div class="col-12 col-md-5 col-lg-5 col-xl-4">
-                        <input class="form-control search-and-filter-container-feilds" type="search"
-                            placeholder="Search for projects..." aria-label="Search for project">
+                    <div class="col-12 col-md-5 col-lg-4 col-xl-4">
+                        <div class="row">
+                            <div class="col-10">
+                                <input class="form-control search-and-filter-container-feilds" type="search"
+                                    placeholder="Search for projects..." aria-label="Search for project">
+                            </div>
+                            <div class="col-2"><button class="btn btn-secondary">Test</button></div>
+                        </div>
                     </div>
                     <div class="d-none d-lg-block col-lg-2 col-xl-2">
 
@@ -75,22 +79,9 @@
             </div>
 
             <!-- Project cards container -->
-            <!-- <div id="projectCardsContainer">
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-6 col-xl-3">
-                        <div class="container-fluid">
-                            <div class="card project-card">
-                                <h2 class="card-title">Project Name</h2>
-                                <h5 class="card-subtitle mb-2 text-body-secondary">Company Name</h5>
-                                <div style="width: 100%">
-                                    <canvas id="myChart"></canvas>
-                                </div>
-                                <h5 class="due-by-indicator">Due By: XX/XX/20XX</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            <div id="projectCardsContainer" class="row">
+                <!-- Project cards will be fetched and added here -->
+            </div>
     </main>
 
     <footer></footer>

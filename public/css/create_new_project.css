@@ -1,0 +1,11 @@
+#form-container {
+    padding: 2rem;
+}
+
+#form-container button {
+    margin-top: 1rem;
+}
+
+#form-error-message {
+    margin: 1rem auto;
+}

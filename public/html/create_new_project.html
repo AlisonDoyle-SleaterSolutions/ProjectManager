@@ -9,10 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="./../css/universal.css" rel="stylesheet">
-    <link href="./../css/ongoing_projects_dashboard.css" rel="stylesheet">
+    <link href="./../css/create_new_project.css" rel="stylesheet">
 
-    <!-- Scripting -->
-    <script src="./../js/projectCards.js" type="module"></script>
 </head>
 <body>
     <header>
@@ -20,7 +18,7 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <!-- Brand -->
-                <a class="navbar-brand brand" href="#">Sleater &AMP; Co.</a>
+                <a class="navbar-brand brand" href="./ongoing_projects_dashboard.html">Sleater &AMP; Co.</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +43,30 @@
     <main>
         <div class="container-fluid">
             <h1>Create New Project</h1>
+            <div id="form-container" class="card">
+                <form method="get" onsubmit="return CreateProject()">
+                    <label class="form-label" for="ProjectNumber">Project Number*</label>
+                    <input id="project-number" class="form-control" type="text" name="ProjectNumber" required>
+
+                    <label class="form-label" for="ProjectName">Project Name*</label>
+                    <input id="project-name" class="form-control" type="text" name="ProjectName" required>
+
+                    <label class="form-label" for="CompanyName">Company Name</label>
+                    <input id="company-name" class="form-control" type="text" name="CompanyName" maxlength="30">
+
+                    <div id="alert-container">
+                    </div>
+
+                    <input class="btn btn-primary" type="submit" value="Create Project">
+                </form>
+            </div>
         </div>
     </main>
+
+    <!-- Scripting -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+    <script src="./../js/page_scripts/create_new_project.js"></script>
 </body>
 </html>
