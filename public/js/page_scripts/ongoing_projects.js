@@ -27,13 +27,12 @@ function PopulateDisplayWithProjects() {
         let projectCard = `
         <div class="col-12 col-md-6 col-lg-6 col-xl-3">
             <div class="card project-card">
-                <h2 class="card-title">${projectsInformation[i].ProjectName} 
-                    <span class="project-number text-body-secondary">(${projectsInformation[i].ProjectNumber})</span>
-                </h2>
-                <h3 class="card-subtitle mb-2 text-body-secondary">${projectsInformation[i].CompanyName}</h3>
+                <h2 class="card-title">${projectsInformation[i].ProjectName}</h2>
+                <h3 class="card-subtitle mb-2 text-body-secondary"><span class="project-number text-body-secondary">(${projectsInformation[i].ProjectNumber}) -</span>${projectsInformation[i].CompanyName}</h3>
                 <div>
                     <canvas id="${canvasId}"></canvas>
                 </div>
+                <h3 class="project-due-date">Due: </h3>
             </div>
         </div>`;
 
@@ -44,7 +43,7 @@ function PopulateDisplayWithProjects() {
 }
 
 function RedirectToProjectCreation() {
-    const NewProjectPage = "/public/html/create_new_project.html";
+    const NewProjectPage = "./create_new_project.html";
 
     // HTML Elements
     let createNewProjectButton = document.getElementById("create-new-project");
@@ -64,7 +63,7 @@ function CreateChart(chartId) {
     let dummyData = {
         labels: [
             "Not Started/Missing Documents",
-            "In Progress/Documents Waiting Approval",
+            "In Progress/Waiting Approval",
             "Completed"
         ],
         datasets: [{
@@ -82,7 +81,7 @@ function CreateChart(chartId) {
             const { ctx, chartArea: { top, right, bottom, left, width, height } } = chart;
             ctx.save();
             let centerPointXAxisValue = width / 2;
-            let centerPointYAxisValue = top + (height / 2);
+            let centerPointYAxisValue = top + (height / 2) + 10;
 
             // Adding text to doughnut chart
             ctx.font = '2rem sans-serif';
@@ -99,6 +98,11 @@ function CreateChart(chartId) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
         },
         plugins: [
             projectCompletionPercentage

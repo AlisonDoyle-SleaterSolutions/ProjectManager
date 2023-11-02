@@ -55,7 +55,7 @@ import { Project } from "./classes/project.js";
     const ctx = document.getElementById('myChart');
 
     // Graph data
-    const projectPercentage = "56%"
+    const projectPercentage = "60%"
 
     let dummyData = {
         labels: [
@@ -94,12 +94,19 @@ import { Project } from "./classes/project.js";
     new Chart(ctx, {
         type: 'doughnut',
         data: dummyData,
+        overrides: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+        },
         options: {
             responsive: true,
             maintainAspectRatio: false,
         },
         plugins: [
-            projectCompletionPercentage
+            projectCompletionPercentage,
         ]
     });
 
