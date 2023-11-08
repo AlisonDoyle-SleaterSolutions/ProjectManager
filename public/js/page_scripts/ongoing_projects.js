@@ -3,6 +3,11 @@
 import "https://cdn.jsdelivr.net/npm/chart.js";
 
 (function () {
+    // Initialising projects if there is no data
+    if (localStorage.getItem("Projects") == null) {
+        localStorage.setItem("Projects", JSON.stringify([]));
+    }
+
     // Populating page w/ projects
     PopulateDisplayWithProjects();
 
