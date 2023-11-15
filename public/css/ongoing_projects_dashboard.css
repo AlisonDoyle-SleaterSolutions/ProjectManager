@@ -8,14 +8,22 @@
     url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.svg#Ravie")format("svg");
 }
 
-.company-name {
-    opacity: 0.6;
+:root {
+    --brandcolor: #FF5733;
 }
 
-.due-by-indicator {
-    color: red;
+.project-number {
+    display: inline-block;
+    font-size: 1.2rem;
+    vertical-align: baseline;
 }
 
-.project-card img {
-    float: right;
+.card-subtitle {
+    font-size: 1.2rem;
+}
+
+.project-due-date {
+    color: var(--brandcolor);
+    font-size: 1.4rem;
+    font-weight: 600;
 }
