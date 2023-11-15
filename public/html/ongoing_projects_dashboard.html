@@ -92,14 +92,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="./../js/page_scripts/ongoing_projects.js"></script>
     <script>
-        function RedirectToProjectDetails() {
+        function RedirectToProjectDetails(project) {
             // alert("test");
 
-            const ProjectDetailsPage = "./project-details.html";
+            // Get project selected
+            let projectCardId = project.getAttribute('id');
+            let projectNumber = projectCardId.replace("-card", "");
+
+            // Pass project to next page
+            let projectDetailsPage = `./project-details.html?${projectNumber}`
 
             // Redirect user to project details
             // NOTE: "_self" means it opens in the same tab
-            window.open(ProjectDetailsPage, "_self");
+            window.open(projectDetailsPage, "_self");
         }
     </script>
 </body>

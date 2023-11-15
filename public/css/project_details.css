@@ -4,9 +4,108 @@
     --tertiary: #7C5CFF;
     --white: #F4F4F6;
     --black: #131216;
+    --green: #198754;
+    --orange: #fd7e14;
+    --yellow: #ffc107;
+    --red: #dc3545;
+}
+
+main {
+    max-height: 10vh;
+}
+
+.row {
+    height: 87vh;
+    max-height: 87vh;
 }
 
 .card {
     height: 100%;
     padding: 2rem;
+}
+
+#project-name {
+    font-size: 2rem;
+}
+
+#project-number,
+#company-name {
+    color: gray;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+#project-overview-table td {
+    text-align: center;
+}
+
+.counter {
+    border-radius: 2rem;
+    font-size: 1.6rem;
+    margin: auto;
+    padding: 0.2rem 1rem;
+    transform: translateX(-3px);
+    width: fit-content;
+}
+
+#not-started-count {
+    border: 4px solid var(--red);
+}
+
+#in-progress-count {
+    border: 4px solid var(--orange);
+}
+
+#pending-count {
+    border: 4px solid var(--yellow);
+}
+
+#completed-count {
+    border: 4px solid var(--green);
+}
+
+.tooltip-icon {
+    border: var(--tertiary) solid 1px;
+    border-radius: 12rem;
+    color: var(--tertiary);
+    float: inline-end;
+    font-size: 0.76rem;
+    font-weight: bold;
+    height: 1.4rem;
+    margin-top: 0.2rem;
+    width: 1.4rem;
+}
+
+#main-content-cover {
+    background-color: #131216;
+    display: none;
+    height: 100vh;
+    position: absolute;
+    top: 0%;
+    opacity: 36%;
+    width: 100%;
+}
+
+#new-item-form-container {
+    display: none;
+    height: 24rem;
+    position: absolute;
+    max-width: 40rem;
+    min-width: fit-content;
+    top: 36%;
+    width: 50%;
+    z-index: 1;
+}
+
+
+@media only screen and (max-width: 576) {
+    #new-item-form-container {
+        left: 10%;
+    }
+}
+
+@media only screen and (min-width: 576) {
+    #new-item-form-container {
+        left: 50%;
+    }
 }

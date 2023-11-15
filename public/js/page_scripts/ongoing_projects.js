@@ -31,7 +31,7 @@ function PopulateDisplayWithProjects() {
         // Formating project card
         let projectCard = `
         <div class="col-12 col-md-6 col-lg-6 col-xl-3">
-            <div class="card project-card" onclick="RedirectToProjectDetails()">
+            <div id="${projectsInformation[i].ProjectNumber}-card" class="card project-card" onclick="RedirectToProjectDetails(this)">
                 <h2 class="card-title">${projectsInformation[i].ProjectName}</h2>
                 <h3 class="card-subtitle mb-2 text-body-secondary"><span class="project-number text-body-secondary">(${projectsInformation[i].ProjectNumber}) - </span>${projectsInformation[i].CompanyName}</h3>
                 <div>

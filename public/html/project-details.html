@@ -28,14 +28,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page"
-                                href="./ongoing_projects_dashboard.html">Ongoing Projects</a>
+                            <a class="nav-link" aria-current="page" href="./ongoing_projects_dashboard.html">Ongoing
+                                Projects</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="./archived_projects_dashboard.html">Archived Projects</a>
                         </li>
                     </ul>
-                    
+
                 </div>
             </div>
         </nav>
@@ -43,34 +43,45 @@
 
     <main>
         <div class="container-fluid">
-            <h1 id="project-name"></h1>
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-5">
                     <div class="card">
-                        <h2>Due: xx-xx-20xx</h2>
-                        <h2>project chart foes here</h2>
+                        <h1 id="project-name"></h1>
+                        <h2 id="project-number"></h2>
+                        <h2 id="company-name"></h2>
+                        <hr>
+                        <i>chart here</i>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-7">
                     <div class="card">
                         <h2>Project Tasks/Documents</h2>
-                        <table>
+                        <table id="project-overview-table">
                             <thead>
-                                <th>Missing</th>
-                                <th>In Progress</th>
-                                <th>Pending Review</th>
-                                <th>Completed</th>
+                                <td>Not Started</td>
+                                <td>In Progress</td>
+                                <td>Pending Review</td>
+                                <td>Completed</td>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>5</td>
-                                    <td>2</td>
-                                    <td>1</td>
-                                    <td>4</td>
+                                    <td>
+                                        <div id="not-started-count" class="counter"></div>
+                                    </td>
+                                    <td>
+                                        <div id="in-progress-count" class="counter"></div>
+                                    </td>
+                                    <td>
+                                        <div id="pending-count" class="counter"></div>
+                                    </td>
+                                    <td>
+                                        <div id="completed-count" class="counter"></div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                         <hr>
+                        <button class="btn btn-primary mb-1" id="new-item-button">New Task/Document</button>
                         <table class="table">
                             <thead>
                                 <th>Name</th>
@@ -78,12 +89,56 @@
                                 <th>Status</th>
                                 <th>Approved</th>
                             </thead>
+                            <tbody id="item-table-body">
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+
+            <div class="card" id="new-item-form-container">
+                <h1>New Task/Document</h1>
+                <form action="">
+                    <label class="form-label mb-1" for="itemName">Task/Document Name*</label>
+                    <input class="form-control mb-2" type="text" id="itemName" required>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="approvalNeededCheckbox">
+                        <label class="form-check-label" for="approvalNeededCheckbox">Approval Needed</label>
+                        <button type="button" class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-title="Have a 2nd party approve of an item before being able to be marked complete">
+                            ?
+                        </button>
+                    </div>
+                    <label class="form-label mb-1">Time Allocated</label>
+                    <div class="input-group mb-2">
+                        <input type="number" id="itemLegnth" class="form-control">
+                        <select id="itemTimeframe" class="form-select">
+                            <option selected>Choose Timeframe...</option>
+                            <option value="Day(s)">Day(s)</option>
+                            <option value="Week(s)">Week(s)</option>
+                            <option value="Month(s)">Month(s)</option>
+                        </select>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="includeInEtdCheckbox">
+                        <label class="form-check-label" for="includeInEtdCheckbox">Include in Estimated Time of
+                            Delivery</label>
+                        <button type="button" class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-title="The time allocated to this item will be included in due date calculation">
+                            ?
+                        </button>
+                    </div>
+                    <button class="btn btn-primary mt-4" type="submit" id="create-item-button">Create
+                        Item</button>
+                </form>
+            </div>
+
         </div>
+        
     </main>
+    
+    <div id="main-content-cover"></div>
 
     <footer></footer>
 

@@ -114,6 +114,7 @@ function ConvertProjectItemsToJson(items) {
             "approval_needed": approvalNeeded,
             "time_allocated": items[i][2],
             "include_in_etd": includeInEdt,
+            "status": "Not Started",
         }
 
         // Add item to items array
