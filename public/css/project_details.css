@@ -1,0 +1,12 @@
+:root {
+    --primary: #FF2E00;
+    --secondary: #D8C5D8;
+    --tertiary: #7C5CFF;
+    --white: #F4F4F6;
+    --black: #131216;
+}
+
+.card {
+    height: 100%;
+    padding: 2rem;
+}

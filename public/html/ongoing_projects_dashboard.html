@@ -91,6 +91,17 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="./../js/page_scripts/ongoing_projects.js"></script>
+    <script>
+        function RedirectToProjectDetails() {
+            // alert("test");
+
+            const ProjectDetailsPage = "./project-details.html";
+
+            // Redirect user to project details
+            // NOTE: "_self" means it opens in the same tab
+            window.open(ProjectDetailsPage, "_self");
+        }
+    </script>
 </body>
 
 </html>

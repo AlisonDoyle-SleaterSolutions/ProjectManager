@@ -1,8 +1,6 @@
 "use strict";
 
 (function () {
-    document.getElementById("test").addEventListener('click', FetchProjectItems, false);
-
     // Enabling tooltips
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -25,6 +23,7 @@ function CreateProject() {
         "ProjectNumber": projectNumber,
         "ProjectName": projectName,
         "CompanyName": companyName,
+        "Items": projectItemsInJsonFormat
     };
 
     // Adding project to localstorage if possible
@@ -40,12 +39,47 @@ function CreateProject() {
     return projectCreationWasSuccessful;
 }
 
+function ValidateTimeAllocated() {
+    // alert("In ValidateTimeAllocated() Function");
+
+    // Get HTML elements
+    let timeLength = document.getElementById('itemLegnth').value;
+    let timeFrame = document.getElementById('itemTimeframe').value;
+
+    // Check if a positve number is entered
+    let validTimeLength = false;
+
+    if ((timeLength.length != 0) && (timeLength != null) && (timeLength >= 0)) {
+        validTimeLength = true;
+    }
+
+    // Check if timeframe is not placeholder
+    let validTimeframe = false;
+
+    if (timeFrame !== "Choose Timeframe...") {
+        validTimeframe = true;
+    }
+
+    // Determing if entire input is valid
+    let allInputsValid = false;
+
+    if ((validTimeLength === true) && (validTimeframe === true)) {
+        allInputsValid = true;
+    } else if (validTimeLength === false) {
+        DisplayError("Please ensure that you have entered a positive number for the time length allocated", "e");
+    } else if (validTimeframe === false) {
+        DisplayError("Please select a timeframe other than the placeholder", "e");
+    }
+
+    return allInputsValid;
+}
+
 function FetchProjectItems() {
     // alert("In FetchProjectItems() function");
 
     // Get items from table
     let itemTable = document.getElementById("itemTableBody");
-    
+
     // Seperate each row into its own element in array
     let itemTableText = (itemTable.innerText).split("\n");
 
@@ -55,27 +89,36 @@ function FetchProjectItems() {
         itemTableText[i] = itemTableText[i].splice(0, itemTableText[i].length - 1);
     }
 
-    console.log(itemTableText)
+    return itemTableText;
 }
 
 function ConvertProjectItemsToJson(items) {
-    let projectItemsJson;
+    let projectItemsJson = [];
 
-    for (let i = 0; i < items.length; i ++) {
-        console.log(items[i]);
+    // Adding new project item
+    for (let i = 0; i < items.length; i++) {
+        // Parse data to make data storage more efficient
+        let approvalNeeded = false;
+        if (items[i][1] === "Yes") {
+            approvalNeeded = true;
+        }
+        
+        let includeInEdt = false;
+        if (items[i][3] === "Yes") {
+            includeInEdt  = true;
+        }
+
+        // Formating item information in json format
+        let item = {
+            "name": items[i][0],
+            "approval_needed": approvalNeeded,
+            "time_allocated": items[i][2],
+            "include_in_etd": includeInEdt,
+        }
+
+        // Add item to items array
+        projectItemsJson.push(item);
     }
-
-    // for (let i = 0; i < items.length; i++) {
-    //     let item = {
-    //         "name": items[i][0]
-    //     }
-
-    //     projectItemsJson += item;
-    // }
-
-    // for (let i = 0; i < projectItemsJson; i++) {
-    //     console.log(projectItemsJson[i])
-    // }
 
     return projectItemsJson;
 }
@@ -121,18 +164,22 @@ function AppendProjectToLocalStorage(newProjectData) {
 function CreateItem() {
     // alert("In CreateItem() function");
 
-    // Get values from HTML
-    let itemName = document.getElementById("itemName").value;
-    let approvalNeeded = document.getElementById("approvalNeededCheckbox").checked == true ? "Yes" : "No";
-    let timeAllocated = `${document.getElementById("itemLegnth").value} ${document.getElementById("itemTimeframe").value}`;
-    let includeInEtd = document.getElementById("includeInEtdCheckbox").checked == true ? "Yes" : "No";
+    let validTimeAllocated = ValidateTimeAllocated();
 
-    // Format item for table
-    let newItem = `<tr><td>${itemName}</td><td>${approvalNeeded}</td><td>${timeAllocated}</td><td>${includeInEtd}</td><td class="delete-item-column"><button class="btn btn-outline-danger delete-item-button" type="button" onclick="DeleteItem(this.parentElement)">X</button></td></tr>`;
+    if (validTimeAllocated !== false) {
+        // Get values from HTML
+        let itemName = document.getElementById("itemName").value;
+        let approvalNeeded = document.getElementById("approvalNeededCheckbox").checked == true ? "Yes" : "No";
+        let timeAllocated = `${document.getElementById("itemLegnth").value} ${document.getElementById("itemTimeframe").value}`;
+        let includeInEtd = document.getElementById("includeInEtdCheckbox").checked == true ? "Yes" : "No";
 
-    // Add item to table
-    let itemTableBody = document.getElementById("itemTableBody");
-    itemTableBody.innerHTML += newItem;
+        // Format item for table
+        let newItem = `<tr><td>${itemName}</td><td>${approvalNeeded}</td><td>${timeAllocated}</td><td>${includeInEtd}</td><td class="delete-item-column"><button class="btn btn-outline-danger delete-item-button" type="button" onclick="DeleteItem(this.parentElement)">X</button></td></tr>`;
+
+        // Add item to table
+        let itemTableBody = document.getElementById("itemTableBody");
+        itemTableBody.innerHTML += newItem;
+    }
 
     // Stop form from reseting page
     return false;

@@ -59,9 +59,8 @@
         <div class="container-fluid">
             <h1>Create New Project</h1>
             <div>
-                <p>Note: <i>* indicates a required feild.</i></p>
-                <div class="row mb-4" id="form-inputs-row">
-                    <div class="col-md-6">
+                <div class="row" id="form-inputs-row">
+                    <div class="col-md-6 mb-4">
                         <form id="project-details" class="card" method="get" onsubmit="return CreateProject()">
                             <legend>Project Details</legend>
                             <label class="form-label mb-1" for="ProjectNumber">Project Number*</label>
@@ -74,7 +73,7 @@
                                 maxlength="30">
                         </form>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-4">
                         <form class="card" method="get" onsubmit="return CreateItem()">
                             <legend>Tasks/Documents</legend>
                             <label class="form-label mb-1" for="itemName">Task/Document Name*</label>
@@ -112,25 +111,30 @@
                                 Item</button>
                         </form>
                     </div>
+
+                    <div class="col-12 mb-4">
+                        <div class="card mb-4">
+                            <table id="itemTable" class="table">
+                                <thead>
+                                    <th>Task/Document Name</th>
+                                    <th>Approval Needed</th>
+                                    <th>Time Allocated</th>
+                                    <th>Include in ETD</th>
+                                    <th class="delete-item-column">Delete</th>
+                                </thead>
+                                <tbody id="itemTableBody">
+                                    <!-- Task Information Here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <input class="btn btn-primary" type="submit" value="Create Project" form="project-details">
+                    </div>
                 </div>
 
-                <div class="card mb-4">
-                    <table id="itemTable" class="table">
-                        <thead>
-                            <th>Task/Document Name</th>
-                            <th>Approval Needed</th>
-                            <th>Time Allocated</th>
-                            <th>Include in ETD</th>
-                            <th class="delete-item-column">Delete</th>
-                        </thead>
-                        <tbody id="itemTableBody">
-                            <!-- Task Information Here -->
-                        </tbody>
-                    </table>
-                </div>
 
-                <input class="btn btn-primary" type="submit" value="Create Project" form="project-details">
-                <button type="button" id="test">test</button>
             </div>
 
         </div>
