@@ -37,7 +37,7 @@ function PopulateDisplayWithProjects() {
                 <div>
                     <canvas id="${canvasId}"></canvas>
                 </div>
-                <h3 class="project-due-date">Due: </h3>
+                <h3 class="project-due-date">Due: ${projectsInformation[i].DueDate}</h3>
             </div>
         </div>`;
 
