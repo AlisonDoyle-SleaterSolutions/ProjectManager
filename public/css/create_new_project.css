@@ -10,25 +10,6 @@
     --orange: #FF5733;
 }
 
-#toastTypeIndicator {
-    border-radius: 360px;
-    height: 1rem;
-    margin-right: 0.6rem;
-    width: 1rem;
-}
-
-.tooltip-icon {
-    border: var(--tertiary) solid 1px;
-    border-radius: 12rem;
-    color: var(--tertiary);
-    float:inline-end;
-    font-size: 0.76rem;
-    font-weight: bold;
-    height: 1.4rem;
-    margin-top: 0.2rem;
-    width: 1.4rem;
-}
-
 .card {
     height: 100%;
     padding: 2rem;
@@ -46,7 +27,7 @@
     height: 24rem;
 }
 
-.btn-outline-danger {
+/* .btn-outline-danger {
     font-size: 0.6rem;
     font-weight: bold;
     height: 2rem;
@@ -55,4 +36,4 @@
 
 .delete-item-column {
     text-align: center;
-}
+} */

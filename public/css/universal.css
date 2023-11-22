@@ -2,10 +2,10 @@
     font-family: "Ravie";
     src: url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.eot");
     src: url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.ttf")format("truetype"),
-    url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.svg#Ravie")format("svg");
+        url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff2")format("woff2"),
+        url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.woff")format("woff"),
+        url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.ttf")format("truetype"),
+        url("https://db.onlinewebfonts.com/t/2aeca327ae0e8ba04bf305f13cb1d589.svg#Ravie")format("svg");
 }
 
 main {
@@ -22,6 +22,31 @@ main {
     width: fit-content;
 }
 
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+    supported by Chrome, Edge, Opera and Firefox */
+}
+
+.center-xy {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
 .search-and-filter-container {
     background-color: whitesmoke;
     border: none;
@@ -31,7 +56,7 @@ main {
 
 .search-and-filter-container-feilds {
     margin: 0.2rem 0;
-} 
+}
 
 .project-card {
     background-color: whitesmoke;
@@ -44,4 +69,23 @@ main {
 .project-card:hover {
     background-color: rgb(231, 231, 231);
     cursor: pointer;
+}
+
+#toastTypeIndicator {
+    border-radius: 360px;
+    height: 1rem;
+    margin-right: 0.6rem;
+    width: 1rem;
+}
+
+.tooltip-icon {
+    border: var(--tertiary) solid 1px;
+    border-radius: 12rem;
+    color: var(--tertiary);
+    float: inline-end;
+    font-size: 0.76rem;
+    font-weight: bold;
+    height: 1.4rem;
+    margin-top: 0.2rem;
+    width: 1.4rem;
 }

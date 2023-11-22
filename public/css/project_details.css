@@ -88,24 +88,45 @@ main {
 
 #new-item-form-container {
     display: none;
-    height: 24rem;
-    position: absolute;
+    height: fit-content;
     max-width: 40rem;
     min-width: fit-content;
-    top: 36%;
     width: 50%;
     z-index: 1;
 }
 
-
-@media only screen and (max-width: 576) {
-    #new-item-form-container {
-        left: 10%;
-    }
+.not-started-badge {
+    background-color: #FF2E0020;
+    border-radius: 12px;
+    border: 1px solid var(--red);
+    color: var(--red);
+    cursor:default;
+    padding: 0.2rem;
 }
 
-@media only screen and (min-width: 576) {
-    #new-item-form-container {
-        left: 50%;
-    }
+.in-progress-badge {
+    background-color: #fd7e1420;
+    border-radius: 12px;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    cursor:default;
+    padding: 0.2rem;
+}
+
+.pending-badge {
+    background-color: #ffc10720;
+    border-radius: 12px;
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+    cursor:default;
+    padding: 0.2rem;
+}
+
+.completed-badge {
+    background-color: #19875420;
+    border-radius: 12px;
+    border: 1px solid var(--green);
+    color: var(--green);
+    cursor:default;
+    padding: 0.2rem;
 }
