@@ -13,7 +13,7 @@
 }())
 
 function PopulateProjectDetails() {
-    // Get project indormation
+    // Get project information
     let projectInformation = FindProjectInJson();
 
     // HTML elements
@@ -36,7 +36,6 @@ function PopulateItemTable(projectInformation) {
     let pendingCount = document.getElementById("pending-count");
     let completedCount = document.getElementById("completed-count");
     let tableBody = document.getElementById("item-table-body");
-
 
     // Add project items to table and update counters
     let notStarted = 0;
@@ -67,10 +66,11 @@ function PopulateItemTable(projectInformation) {
                 break;
         }
 
-        let newItem = `<tr><td>${projectInformation.Items[i].name}</td><td>${projectInformation.Items[i].time_allocated}</td><td>${status}</td><td></td><td></td><td><i class="bi bi-pencil btn btn-outline-warning edit-button" title="Edit Task/Document"></i> <i class="bi bi-trash btn btn-outline-danger" title="Delete Task/Document"></i></td></tr>`
+        let newItem = `<tr><td>${projectInformation.Items[i].name}</td><td>${projectInformation.Items[i].time_allocated}</td><td>${status}</td><td></td><td><button class="btn btn-secondary">Mark Complete</button></td><td><i class="bi bi-pencil-fill btn btn-outline-warning edit-button" title="Edit Task/Document"></i> <i class="bi bi-trash-fill btn btn-outline-danger" onclick="DeleteItem(this.parentElement)" title="Delete Task/Document"></i></td></tr>`
         tableBody.innerHTML += newItem;
     }
 
+    // Update status conunter
     missingCount.innerText = notStarted;
     inProgressCount.innerText = inProgress;
     pendingCount.innerText = pendingReview;
@@ -167,6 +167,61 @@ function CreateItem() {
     return false;
 }
 
+function DeleteItem(cell) {
+    // alert("In DeleteItem() function");
+
+    // Get table elements
+    let rowIndex = cell.parentElement.rowIndex - 1;
+    let itemTableBody = document.getElementById("item-table-body");
+
+    // Get identifier of item to delete
+    let itemTableText = (itemTableBody.innerText).split("\n");
+    let itemDetails = itemTableText[rowIndex].split("\t");
+    let itemIdentifier = itemDetails[0];
+
+    // Delete item from table
+    itemTableBody.deleteRow(rowIndex);
+
+    // Replace details of project
+    let projectInformation = FindProjectInJson();
+    let parsedItems = projectInformation.Items;
+    let newDueDate = new Date(projectInformation.DueDate);
+    for (let i = parsedItems.length - 1; i >= 0; i--) {
+        if (parsedItems[i].name == itemIdentifier) {
+            newDueDate = newDueDate.addDays(GetDaysToCompleteProject(parsedItems[i].time_allocated) * -1);
+            parsedItems.splice(i, 1);
+        }
+    }
+
+    // Update project details
+    projectInformation.Items = parsedItems;
+    projectInformation.DueDate = newDueDate;
+
+    UpdateProjectsInformation(projectInformation);
+}
+
+function UpdateProjectsInformation(newProjectData) {
+    let projectsData = JSON.parse(localStorage.getItem('Projects'));
+    let projectInformation = FindProjectInJson();
+
+    // Get project index
+    let projectIndex = 0;
+    for (let i = 0; i < projectsData.length; i++) {
+        if (projectsData[i].ProjectNumber == projectInformation.ProjectNumber) {
+            projectIndex = i;
+        }
+    }
+    // Append data to project
+    projectsData.splice(projectIndex, 1, newProjectData);
+
+    // Append data to local storage
+    localStorage.setItem('Projects', JSON.stringify(projectsData));
+
+    // Refresh table
+    document.getElementById("item-table-body").innerHTML = "";
+    PopulateItemTable(projectInformation);
+}
+
 function DisplayError(message, messageType) {
     // alert("In DisplayError() function");
 
@@ -245,4 +300,30 @@ function GetProjectNumber() {
     projectNumber = dividedUrl[1];
 
     return projectNumber;
+}
+
+function GetDaysToCompleteProject(timeFrame) {
+    let allocatedTime = timeFrame.split(" ");
+    let timeframeLength = parseInt(allocatedTime[0]);
+    let timeframe = allocatedTime[1];
+
+    // Convert time frame to days
+    let timeframeDays = 1;
+    if (timeframe == "Month(s)") {
+        timeframeDays = 28;
+    } else if (timeframe == "Week(s)") {
+        timeframeDays = 7;
+    }
+
+    // Add number of days for item to total
+    let daysRequired = timeframeLength * timeframeDays;
+    
+    return daysRequired;
+}
+
+// Add function to date to allow ability to add and remove days
+Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
 }

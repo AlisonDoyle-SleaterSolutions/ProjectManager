@@ -15,6 +15,9 @@
     <p>Hello World</p>
     <a href="./ongoing_projects_dashboard.html">Ongoing Projects Dashboard</a>
 
+    <input id="input" type="number">
+    <button id="button">Click me</button>
+
     <p id="result"></p>
 
     <!-- Scripting -->
@@ -23,16 +26,23 @@
         crossorigin="anonymous"></script>
 
     <script>
+        document.getElementById('button').addEventListener('click', CalculateDate, false);
+
+        function CalculateDate() {
+            let days = Number(document.getElementById('input').value);
+
+            let date = new Date();
+            console.log(typeof(days));
+            let newDate = date.addDays(days);
+
+            document.getElementById("result").innerHTML = `Original Date: ${date.toLocaleDateString()}<br>New Date: ${newDate.toLocaleDateString()}`
+
+        }
         Date.prototype.addDays = function (days) {
             var date = new Date(this.valueOf());
             date.setDate(date.getDate() + days);
             return date;
         }
-
-        let date = new Date();
-        let newDate = date.addDays(28);
-
-        document.getElementById("result").innerHTML = `Original Date: ${date}<br>New Date: ${newDate.toLocaleDateString()}`
     </script>
 </body>
 

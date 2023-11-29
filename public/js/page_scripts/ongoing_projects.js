@@ -29,6 +29,8 @@ function PopulateDisplayWithProjects() {
         let canvasId = projectsInformation[i].ProjectName.replace(" ", "-") + "-Canvas";
 
         // Formating project card
+        let dueDate = new Date(projectsInformation[i].DueDate);
+        dueDate = dueDate.toLocaleDateString();
         let projectCard = `
         <div class="col-12 col-md-6 col-lg-6 col-xl-3">
             <div id="${projectsInformation[i].ProjectNumber}-card" class="card project-card" onclick="RedirectToProjectDetails(this)">
@@ -37,7 +39,7 @@ function PopulateDisplayWithProjects() {
                 <div>
                     <canvas id="${canvasId}"></canvas>
                 </div>
-                <h3 class="project-due-date">Due: ${projectsInformation[i].DueDate}</h3>
+                <h3 class="project-due-date">Due: ${dueDate}</h3>
             </div>
         </div>`;
 

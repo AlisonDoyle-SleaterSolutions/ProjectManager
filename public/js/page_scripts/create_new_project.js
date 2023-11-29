@@ -44,7 +44,7 @@ function CreateProject() {
     }
 
     let dueDate = dateOfCreation.addDays(daysNeededToCompleteProject);
-    console.log(dueDate.toLocaleDateString());
+    console.log(dueDate);
 
     // Formating data for local storage
     let projectInformation = {

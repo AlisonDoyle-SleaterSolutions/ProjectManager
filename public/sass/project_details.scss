@@ -1,0 +1,126 @@
+// Application colors
+// $primary: #ff2e0080;
+// $secondary: #D8C5D8;
+
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+main {
+    max-height: 10vh;
+}
+
+.row {
+    height: 87vh;
+    max-height: 87vh;
+}
+
+.card {
+    height: 100%;
+    padding: 2rem;
+
+    #project-name {
+        font-size: 2rem;
+    }
+    
+    #project-number,
+    #company-name {
+        color: gray;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+}
+
+#project-overview-table td {
+    text-align: center;
+}
+
+.counter {
+    border-radius: 2rem;
+    font-size: 1.6rem;
+    margin: auto;
+    padding: 0.2rem 1rem;
+    transform: translateX(-3px);
+    width: fit-content;
+}
+
+#not-started-count {
+    border: 4px solid $red;
+}
+
+#in-progress-count {
+    border: 4px solid $orange;
+}
+
+#pending-count {
+    border: 4px solid $yellow;
+}
+
+#completed-count {
+    border: 4px solid $green;
+}
+
+.tooltip-icon {
+    border: #7C5CFF solid 1px;
+    border-radius: 12rem;
+    color: #7C5CFF;
+    float: inline-end;
+    font-size: 0.76rem;
+    font-weight: bold;
+    height: 1.4rem;
+    margin-top: 0.2rem;
+    width: 1.4rem;
+}
+
+#main-content-cover {
+    background-color: #131216;
+    display: none;
+    height: 100vh;
+    position: absolute;
+    top: 0%;
+    opacity: 36%;
+    width: 100%;
+}
+
+#new-item-form-container {
+    display: none;
+    height: fit-content;
+    max-width: 40rem;
+    min-width: fit-content;
+    width: 50%;
+    z-index: 1;
+}
+
+.not-started-badge {
+    background-color: #FF2E0020;
+    border-radius: 12px;
+    border: 1px solid $red;
+    color: $red;
+    cursor:default;
+    padding: 0.2rem;
+}
+
+.in-progress-badge {
+    background-color: #fd7e1420;
+    border-radius: 12px;
+    border: 1px solid $orange;
+    color: $orange;
+    cursor:default;
+    padding: 0.2rem;
+}
+
+.pending-badge {
+    background-color: #ffc10720;
+    border-radius: 12px;
+    border: 1px solid $yellow;
+    color: $yellow;
+    cursor:default;
+    padding: 0.2rem;
+}
+
+.completed-badge {
+    background-color: #19875420;
+    border-radius: 12px;
+    border: 1px solid $green;
+    color: $green;
+    cursor:default;
+    padding: 0.2rem;
+}
