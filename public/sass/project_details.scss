@@ -74,7 +74,7 @@ main {
     background-color: #131216;
     display: none;
     height: 100vh;
-    position: absolute;
+    position: fixed;
     top: 0%;
     opacity: 36%;
     width: 100%;
@@ -85,7 +85,8 @@ main {
     height: fit-content;
     max-width: 40rem;
     min-width: fit-content;
-    transform: translateY(-152%) translateX(-50%);
+    position: fixed;
+    transform: translateY(-50%) translateX(-50%);
     width: 50%;
     z-index: 1;
 }
@@ -96,7 +97,7 @@ main {
     border: 1px solid $red;
     color: $red;
     cursor:default;
-    padding: 0.2rem;
+    padding: 0.2rem 0.4rem;
 }
 
 .in-progress-badge {
@@ -105,7 +106,7 @@ main {
     border: 1px solid $orange;
     color: $orange;
     cursor:default;
-    padding: 0.2rem;
+    padding: 0.2rem 0.4rem;
 }
 
 .pending-badge {
@@ -114,7 +115,7 @@ main {
     border: 1px solid #CC9900;
     color: #CC9900;
     cursor: default;
-    padding: 0.2rem;
+    padding: 0.2rem 0.4rem;
 }
 
 .completed-badge {
@@ -123,7 +124,7 @@ main {
     border: 1px solid $green;
     color: $green;
     cursor: default;
-    padding: 0.2rem;
+    padding: 0.2rem 0.4rem;
 }
 
 .item-control {

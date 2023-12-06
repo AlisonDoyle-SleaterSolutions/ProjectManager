@@ -1,5 +1,7 @@
 "use strict";
 
+import "https://cdn.jsdelivr.net/npm/chart.js";
+
 (function () {
     document.getElementById("new-item-button").addEventListener('click', ShowNewItemForm, false);
     document.getElementById("main-content-cover").addEventListener('click', HideNewItemForm, false);
@@ -17,6 +19,7 @@ function PopulateProjectDetails() {
     let projectInformation = FindProjectInJson();
 
     // HTML elements
+    let container = document.getElementById("project-information");
     let projectNameLabel = document.getElementById("project-name");
     let projectNumberLabel = document.getElementById("project-number");
     let companyNameLabel = document.getElementById("company-name");
@@ -25,6 +28,10 @@ function PopulateProjectDetails() {
     // Formating project due date
     let dueDate =  new Date(projectInformation.DueDate);
     dueDate = dueDate.toLocaleDateString();
+
+    // Create and append progress chart
+    let chart = CreateChart(projectInformation.Items);
+    container.appendChild(chart);
 
     // Setting values of template
     projectNameLabel.innerText = projectInformation.ProjectName;
@@ -97,17 +104,28 @@ function CreateTableItem(item, statusInformation) {
     let statusCell = document.createElement('td');
     statusCell.innerHTML += statusInformation;
 
+    // File upload cell
+    let fileUploadCell = document.createElement('td');
+
     // Control cell
     let controlsCell = document.createElement('td');
+    controlsCell.style.display = "flex"
+    controlsCell.style.justifyContent = "space-evenly"
 
     // Control buttons
+    let nextStageButton = document.createElement('button');
+    nextStageButton.classList.add('btn');
+    nextStageButton.innerText = "Mark as 'stagename'"
+
     let editButton = document.createElement('button');
     editButton.classList.add('bi', 'bi-pencil-fill', 'btn', 'btn-outline-warning', 'edit-button', 'item-control');
+    editButton.onclick = function() {OpenItemEditor(this.parentElement)};
 
     let deleteButton = document.createElement('button');
     deleteButton.classList.add('bi', 'bi-trash-fill', 'btn', 'btn-outline-danger', 'item-control');
     deleteButton.onclick = function() {DeleteItem(this.parentElement)};
 
+    controlsCell.appendChild(nextStageButton);
     controlsCell.appendChild(editButton);
     controlsCell.appendChild(deleteButton);
 
@@ -115,7 +133,8 @@ function CreateTableItem(item, statusInformation) {
     newItem.appendChild(nameCell);
     newItem.appendChild(timeCell);
     newItem.appendChild(statusCell);    
-    newItem.appendChild(controlsCell)
+    // newItem.appendChild(fileUploadCell);
+    newItem.appendChild(controlsCell);
 
     return newItem;
 }
@@ -253,6 +272,9 @@ function DeleteItem(cell) {
 
     UpdateProjectsInformation(projectInformation);
     document.getElementById('due-date').innerHTML = `Due: ${newDueDate.toLocaleDateString()}`;
+
+    itemTableBody.innerHTML = '';
+    PopulateItemTable(FindProjectInJson());
 }
 
 function UpdateProjectsInformation(newProjectData) {
@@ -374,6 +396,116 @@ function GetDaysToCompleteProject(timeFrame) {
     let daysRequired = timeframeLength * timeframeDays;
     
     return daysRequired;
+}
+
+function CreateChart(projectItems) {
+    let canvasWrapper = document.createElement('div');
+    canvasWrapper.style.display = "flex";
+    canvasWrapper.style.justifyContent = "center";
+    canvasWrapper.style.alignItems = "center";
+
+    let canvas = document.createElement('canvas');
+    canvas.style.maxHeight = "20rem";
+
+    let itemStats = ItemStats(projectItems);
+    let totalItems = 0;
+    itemStats.map((noItemInStage) => {
+        totalItems += noItemInStage;
+    })
+    let completion = (itemStats[3] / totalItems) * 100;
+
+    // Chart data
+    let projectData = {
+        labels: [
+            "Not Started",
+            "In Progress",
+            "Pending Review",
+            "Completed"
+        ],
+        datasets: [{
+            data: itemStats,
+            borderWidth: 1,
+            backgroundColor: ["#dc3545", "#fd7e14", "#ffc107", "#198754"],
+            cutout: "76%"
+        }]
+    };
+
+    // Chart central percentage
+    const projectCompletionPercentage = {
+        id: 'percentage',
+        beforeDraw(chart, args, options) {
+            // Calculating the center point of doughnut chart (ignoring legend)
+            const { ctx, chartArea: { top, right, bottom, left, width, height } } = chart;
+            ctx.save();
+            let centerPointXAxisValue = width / 2;
+            let centerPointYAxisValue = top + (height / 2) + 10;
+
+            // Adding text to doughnut chart
+            ctx.font = '2rem sans-serif';
+            ctx.textAlign = "center";
+            ctx.textStyle = "black";
+            ctx.fillText(`${completion.toFixed(0)}%`, centerPointXAxisValue, centerPointYAxisValue);
+        }
+    };
+
+    // Creating chart
+    new Chart(canvas, {
+        type: 'doughnut',
+        data: projectData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+        },
+        plugins: [
+            projectCompletionPercentage
+        ]
+    });
+
+    canvasWrapper.appendChild(canvas);
+
+    return canvasWrapper;
+}
+
+function ItemStats(projectItems) {
+    let notStarted = 0;
+    let inProgress = 0;
+    let pendingReview = 0;
+    let completed = 0;
+
+    let numberOfItemsInEachStage = [];
+
+    for (let i = 0; i < projectItems.length; i++) {
+        switch (projectItems[i].status) {
+            case "Not Started":
+                notStarted++;
+                break;
+            case "In Progress":
+                inProgress++;
+                break;
+            case "Pending Review":
+                pendingReview++;
+                break;
+            default:
+                completed++;
+                break;
+        }
+    }
+
+    numberOfItemsInEachStage = [notStarted, inProgress, pendingReview, completed];
+
+    return numberOfItemsInEachStage;
+} 
+
+function OpenItemEditor(cell) {
+    // alert("In OpenItemEditor() funtion")
+
+    ShowNewItemForm();
+
 }
 
 // Add function to date to allow ability to add and remove days

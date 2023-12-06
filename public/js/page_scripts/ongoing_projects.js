@@ -97,7 +97,7 @@ function CreateChart(projectItems) {
         datasets: [{
             data: itemStats,
             borderWidth: 1,
-            backgroundColor: ["#FF5733", "#ff8500", "#FFC300", "#9FE2BF"],
+            backgroundColor: ["#dc3545", "#fd7e14", "#ffc107", "#198754"],
             cutout: "76%"
         }]
     };
