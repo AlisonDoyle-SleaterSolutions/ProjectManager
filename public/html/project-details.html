@@ -58,9 +58,13 @@
 
         <div class="container-fluid">
             <div class="row">
+                <!-- Project Metadata -->
                 <div class="col-12 col-xl-4 mb-4">
                     <div class="card">
-                        <h1 id="project-name"></h1>
+                        <div>
+                            <h1 style="float: left;" id="project-name"></h1>
+                            <h2 style="display: inline; float: right;" id="due-date"></h2>
+                        </div>
                         <h2 id="project-number"></h2>
                         <h2 id="company-name"></h2>
                         <hr>
@@ -68,9 +72,12 @@
                             src="./../resources/images/chart-placeholder.png" alt="">
                     </div>
                 </div>
+
                 <div class="col-12 col-xl-8 mb-4">
                     <div class="card">
                         <h2>Project Tasks/Documents</h2>
+
+                        <!-- Stages counter -->
                         <table id="project-overview-table">
                             <thead>
                                 <td>Not Started</td>
@@ -99,13 +106,13 @@
                         <hr>
 
                         <button class="btn btn-primary mb-1" id="new-item-button">New Task/Document</button>
+
+                        <!-- Item details table -->
                         <table class="table">
                             <thead>
                                 <th>Name</th>
                                 <th>Time Allocated</th>
                                 <th>Status</th>
-                                <th>Approved</th>
-                                <th>Complete</th>
                                 <th></th>
                             </thead>
                             <tbody id="item-table-body">

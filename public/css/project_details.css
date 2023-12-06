@@ -12058,6 +12058,7 @@ main {
   max-width: 40rem;
   min-width: -moz-fit-content;
   min-width: fit-content;
+  transform: translateY(-152%) translateX(-50%);
   width: 50%;
   z-index: 1;
 }
@@ -12083,8 +12084,8 @@ main {
 .pending-badge {
   background-color: rgba(255, 193, 7, 0.1254901961);
   border-radius: 12px;
-  border: 1px solid #ffc107;
-  color: #ffc107;
+  border: 1px solid #CC9900;
+  color: #CC9900;
   cursor: default;
   padding: 0.2rem;
 }
@@ -12096,4 +12097,8 @@ main {
   color: #198754;
   cursor: default;
   padding: 0.2rem;
+}
+
+.item-control {
+  margin: auto 0.2rem;
 }/*# sourceMappingURL=project_details.css.map */

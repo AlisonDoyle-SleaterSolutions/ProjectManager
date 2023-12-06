@@ -85,6 +85,7 @@ main {
     height: fit-content;
     max-width: 40rem;
     min-width: fit-content;
+    transform: translateY(-152%) translateX(-50%);
     width: 50%;
     z-index: 1;
 }
@@ -110,9 +111,9 @@ main {
 .pending-badge {
     background-color: #ffc10720;
     border-radius: 12px;
-    border: 1px solid $yellow;
-    color: $yellow;
-    cursor:default;
+    border: 1px solid #CC9900;
+    color: #CC9900;
+    cursor: default;
     padding: 0.2rem;
 }
 
@@ -121,6 +122,10 @@ main {
     border-radius: 12px;
     border: 1px solid $green;
     color: $green;
-    cursor:default;
+    cursor: default;
     padding: 0.2rem;
+}
+
+.item-control {
+    margin: auto 0.2rem;
 }

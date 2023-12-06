@@ -20,11 +20,17 @@ function PopulateProjectDetails() {
     let projectNameLabel = document.getElementById("project-name");
     let projectNumberLabel = document.getElementById("project-number");
     let companyNameLabel = document.getElementById("company-name");
+    let dueDateLabel = document.getElementById("due-date");
+
+    // Formating project due date
+    let dueDate =  new Date(projectInformation.DueDate);
+    dueDate = dueDate.toLocaleDateString();
 
     // Setting values of template
     projectNameLabel.innerText = projectInformation.ProjectName;
     projectNumberLabel.innerText = projectInformation.ProjectNumber;
     companyNameLabel.innerText = projectInformation.CompanyName
+    dueDateLabel.innerText = `Due: ${dueDate}`;
 
     PopulateItemTable(projectInformation);
 }
@@ -38,7 +44,7 @@ function PopulateItemTable(projectInformation) {
     let tableBody = document.getElementById("item-table-body");
 
     // Add project items to table and update counters
-    let notStarted = 0;
+    let notStarted = 0
     let inProgress = 0;
     let pendingReview = 0;
     let completed = 0;
@@ -66,8 +72,8 @@ function PopulateItemTable(projectInformation) {
                 break;
         }
 
-        let newItem = `<tr><td>${projectInformation.Items[i].name}</td><td>${projectInformation.Items[i].time_allocated}</td><td>${status}</td><td></td><td><button class="btn btn-secondary">Mark Complete</button></td><td><i class="bi bi-pencil-fill btn btn-outline-warning edit-button" title="Edit Task/Document"></i> <i class="bi bi-trash-fill btn btn-outline-danger" onclick="DeleteItem(this.parentElement)" title="Delete Task/Document"></i></td></tr>`
-        tableBody.innerHTML += newItem;
+        let newItem = CreateTableItem(projectInformation.Items[i], status);
+        tableBody.appendChild(newItem);
     }
 
     // Update status conunter
@@ -75,6 +81,43 @@ function PopulateItemTable(projectInformation) {
     inProgressCount.innerText = inProgress;
     pendingCount.innerText = pendingReview;
     completedCount.innerText = completed;
+}
+
+function CreateTableItem(item, statusInformation) {
+    // Item row
+    let newItem = document.createElement('tr');
+
+    // Information cells
+    let nameCell = document.createElement('td');
+    nameCell.innerText = item.name;
+
+    let timeCell = document.createElement('td');
+    timeCell.innerText = item.time_allocated;
+
+    let statusCell = document.createElement('td');
+    statusCell.innerHTML += statusInformation;
+
+    // Control cell
+    let controlsCell = document.createElement('td');
+
+    // Control buttons
+    let editButton = document.createElement('button');
+    editButton.classList.add('bi', 'bi-pencil-fill', 'btn', 'btn-outline-warning', 'edit-button', 'item-control');
+
+    let deleteButton = document.createElement('button');
+    deleteButton.classList.add('bi', 'bi-trash-fill', 'btn', 'btn-outline-danger', 'item-control');
+    deleteButton.onclick = function() {DeleteItem(this.parentElement)};
+
+    controlsCell.appendChild(editButton);
+    controlsCell.appendChild(deleteButton);
+
+    // Combine row elements
+    newItem.appendChild(nameCell);
+    newItem.appendChild(timeCell);
+    newItem.appendChild(statusCell);    
+    newItem.appendChild(controlsCell)
+
+    return newItem;
 }
 
 function FindProjectInJson() {
@@ -134,6 +177,14 @@ function CreateItem() {
         let timeAllocated = `${document.getElementById("itemLegnth").value} ${document.getElementById("itemTimeframe").value}`;
         let includeInEtd = document.getElementById("includeInEtdCheckbox").checked;
 
+        // Get project information
+        let projectsData = JSON.parse(localStorage.getItem('Projects'));
+        let projectInformation = FindProjectInJson();
+
+        // Get new due date
+        let daysNeededForItem = GetDaysToCompleteProject(timeAllocated);
+        let newDueDate = new Date(projectInformation.DueDate).addDays(daysNeededForItem);
+
         // Format item
         let item = {
             "name": itemName,
@@ -143,10 +194,11 @@ function CreateItem() {
             "status": "Not Started",
         }
 
-        // Add task to project and  refesh task viewer
-        let projectsData = JSON.parse(localStorage.getItem('Projects'));
-        let projectInformation = FindProjectInJson();
+        // Add task to project
         projectInformation['Items'].push(item);
+
+        // Update project due date
+        projectInformation.DueDate = newDueDate;
 
         // Append item to project
         let projectIndex = 0;
@@ -158,9 +210,11 @@ function CreateItem() {
         projectsData.splice(projectIndex, 1, projectInformation);
         localStorage.setItem('Projects', JSON.stringify(projectsData));
 
-        // Refresh table
+        // Refresh details
         document.getElementById("item-table-body").innerHTML = "";
         PopulateItemTable(projectInformation);
+
+        document.getElementById('due-date').innerText = `Due: ${newDueDate.toLocaleDateString()}`;
     }
 
     // Stop form from reseting page
@@ -198,6 +252,7 @@ function DeleteItem(cell) {
     projectInformation.DueDate = newDueDate;
 
     UpdateProjectsInformation(projectInformation);
+    document.getElementById('due-date').innerHTML = `Due: ${newDueDate.toLocaleDateString()}`;
 }
 
 function UpdateProjectsInformation(newProjectData) {

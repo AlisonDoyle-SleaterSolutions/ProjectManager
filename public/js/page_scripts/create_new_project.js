@@ -53,7 +53,7 @@ function CreateProject() {
         "CompanyName": companyName,
         "Items": projectItemsInJsonFormat,
         "CreationDate": dateOfCreation,
-        "DueDate": dueDate.toLocaleDateString()
+        "DueDate": dueDate
     };
 
     // Adding project to localstorage if possible
