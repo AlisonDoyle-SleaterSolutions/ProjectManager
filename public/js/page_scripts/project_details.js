@@ -2,6 +2,9 @@
 
 import "https://cdn.jsdelivr.net/npm/chart.js";
 
+// Gloabl variables
+var projectChart;
+
 (function () {
     document.getElementById("new-item-button").addEventListener('click', ShowNewItemForm, false);
     document.getElementById("main-content-cover").addEventListener('click', HideNewItemForm, false);
@@ -27,7 +30,7 @@ function PopulateProjectDetails() {
     let dueDateLabel = document.getElementById("due-date");
 
     // Formating project due date
-    let dueDate =  new Date(projectInformation.DueDate);
+    let dueDate = new Date(projectInformation.DueDate);
     dueDate = dueDate.toLocaleDateString();
 
     // Create and append progress chart
@@ -117,14 +120,15 @@ function CreateTableItem(item, statusInformation) {
     let nextStageButton = document.createElement('button');
     nextStageButton.classList.add('btn');
     nextStageButton.innerText = "Mark as 'stagename'"
+    nextStageButton.onclick = function () { UpdateStatus(this.parentElement) };
 
     let editButton = document.createElement('button');
     editButton.classList.add('bi', 'bi-pencil-fill', 'btn', 'btn-outline-warning', 'edit-button', 'item-control');
-    editButton.onclick = function() {OpenItemEditor(this.parentElement)};
+    editButton.onclick = function () { OpenItemEditor(this.parentElement) };
 
     let deleteButton = document.createElement('button');
     deleteButton.classList.add('bi', 'bi-trash-fill', 'btn', 'btn-outline-danger', 'item-control');
-    deleteButton.onclick = function() {DeleteItem(this.parentElement)};
+    deleteButton.onclick = function () { DeleteItem(this.parentElement) };
 
     controlsCell.appendChild(nextStageButton);
     controlsCell.appendChild(editButton);
@@ -133,7 +137,7 @@ function CreateTableItem(item, statusInformation) {
     // Combine row elements
     newItem.appendChild(nameCell);
     newItem.appendChild(timeCell);
-    newItem.appendChild(statusCell);    
+    newItem.appendChild(statusCell);
     // newItem.appendChild(fileUploadCell);
     newItem.appendChild(controlsCell);
 
@@ -404,7 +408,7 @@ function GetDaysToCompleteProject(timeFrame) {
 
     // Add number of days for item to total
     let daysRequired = timeframeLength * timeframeDays;
-    
+
     return daysRequired;
 }
 
@@ -413,9 +417,11 @@ function CreateChart(projectItems) {
     canvasWrapper.style.display = "flex";
     canvasWrapper.style.justifyContent = "center";
     canvasWrapper.style.alignItems = "center";
+    canvasWrapper.id = "canvas-wrapper";
 
     let canvas = document.createElement('canvas');
     canvas.style.maxHeight = "20rem";
+    canvas.id = "project-graph";
 
     let itemStats = ItemStats(projectItems);
     let totalItems = 0;
@@ -476,6 +482,8 @@ function CreateChart(projectItems) {
         ]
     });
 
+    projectChart  = canvas;
+
     canvasWrapper.appendChild(canvas);
 
     return canvasWrapper;
@@ -509,7 +517,7 @@ function ItemStats(projectItems) {
     numberOfItemsInEachStage = [notStarted, inProgress, pendingReview, completed];
 
     return numberOfItemsInEachStage;
-} 
+}
 
 function OpenItemEditor(cell) {
     // alert("In OpenItemEditor() funtion")
@@ -535,7 +543,7 @@ function OpenItemEditor(cell) {
     // Get item identifier from table
     let rowIndex = cell.parentElement.rowIndex - 1;
     let itemTableText = (itemTableBody.innerText).split('\n');
-    let itemDetails = itemTableText[rowIndex*3].split("\t");
+    let itemDetails = itemTableText[rowIndex * 3].split("\t");
     let itemIdentifier = itemDetails[0];
 
     // Get full item details
@@ -552,7 +560,7 @@ function OpenItemEditor(cell) {
     itemName.value = item.name;
     itemName.disabled = true;
     approvalNeededCheckbox.checked = item.approval_needed;
-    
+
     let timeInformation = item.time_allocated.split(' ');
     itemLegnth.value = timeInformation[0];
     itemTimeframe.value = timeInformation[1];
@@ -583,9 +591,65 @@ function EditItem() {
     projectInformation.Items = parsedItems;
 
     UpdateProjectsInformation(projectInformation);
-    
+
     itemTableBody.innerHTML = '';
     PopulateItemTable(FindProjectInJson());
+}
+
+function UpdateStatus(cell) {
+    // Get table elements
+    let rowIndex = cell.parentElement.rowIndex - 1;
+    let itemTableBody = document.getElementById("item-table-body");
+
+    // Get identifier of item to update status of
+    let itemTableText = (itemTableBody.innerText).split("\n");
+    let itemDetails = itemTableText[rowIndex * 3].split("\t");
+    let itemIdentifier = itemDetails[0];
+
+    // Replace details of project
+    let projectInformation = FindProjectInJson();
+    let parsedItems = projectInformation.Items;
+    for (let i = parsedItems.length - 1; i >= 0; i--) {
+        if (parsedItems[i].name == itemIdentifier) {
+            let nextStage = SelectNextStage(parsedItems[i].status, parsedItems[i].approval_needed);
+
+            if (nextStage != null) {
+                parsedItems[i].status = nextStage;
+
+                if ((currentStage == "In Progress") && (approvalSetting === true)) {
+                    nextStage = "Pending Review"
+                } else if (currentStage == "In Progress") {
+                    nextStage = "Completed"
+                } else if (currentStage == "Pending Review") {
+                    nextStage = "Completed"
+                }
+            }
+        }
+    }
+
+    // Update project details
+    projectInformation.Items = parsedItems;
+
+    UpdateProjectsInformation(projectInformation);
+
+    itemTableBody.innerHTML = '';
+    PopulateItemTable(FindProjectInJson());
+}
+
+function SelectNextStage(currentStage, approvalSetting) {
+    let nextStage = null;
+
+    if (currentStage == "Not Started") {
+        nextStage = "In Progress";
+    } else if ((currentStage == "In Progress") && (approvalSetting === true)) {
+        nextStage = "Pending Review"
+    } else if (currentStage == "In Progress") {
+        nextStage = "Completed"
+    } else if (currentStage == "Pending Review") {
+        nextStage = "Completed"
+    }
+
+    return nextStage;
 }
 
 // Add function to date to allow ability to add and remove days
