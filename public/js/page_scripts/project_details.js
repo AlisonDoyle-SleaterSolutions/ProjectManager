@@ -6,6 +6,7 @@ import "https://cdn.jsdelivr.net/npm/chart.js";
     document.getElementById("new-item-button").addEventListener('click', ShowNewItemForm, false);
     document.getElementById("main-content-cover").addEventListener('click', HideNewItemForm, false);
     document.getElementById("create-item-button").addEventListener('click', CreateItem, false);
+    document.getElementById('edit-item-button').addEventListener('click', EditItem, false);
 
     PopulateProjectDetails();
 
@@ -155,20 +156,25 @@ function FindProjectInJson() {
     return projectInformation;
 }
 
-function ShowNewItemForm(formTitle) {
+function ShowNewItemForm() {
     // alert("In ShowNewItemForm() Function");
 
     // Html elements
     let formContainer = document.getElementById("new-item-form-container");
     let contentCover = document.getElementById("main-content-cover");
     let formHeader = document.getElementById('item-form-name');
+    let createButton = document.getElementById('create-item-button');
+    let editButton = document.getElementById('edit-item-button');
 
     // Show form
     formContainer.style.display = "block";
     contentCover.style.display = "block";
+    editButton.style.display = "none";
+    createButton.style.display = "block";
+    itemName.disabled = false;
 
     // Set appropriate header
-    formHeader.innerText = formTitle;
+    formHeader.innerText = "Create Task/Document";
 }
 
 function HideNewItemForm() {
@@ -508,11 +514,78 @@ function ItemStats(projectItems) {
 function OpenItemEditor(cell) {
     // alert("In OpenItemEditor() funtion")
 
-    ShowNewItemForm("Edit Task/Document");
+    ShowNewItemForm();
 
     // Html elements
+    let itemTableBody = document.getElementById("item-table-body");
     let formHeader = document.getElementById('item-form-name');
+    let createButton = document.getElementById('create-item-button');
+    let editButton = document.getElementById('edit-item-button');
+    let itemName = document.getElementById('itemName');
+    let approvalNeededCheckbox = document.getElementById('approvalNeededCheckbox');
+    let itemLegnth = document.getElementById('itemLegnth');
+    let itemTimeframe = document.getElementById('itemTimeframe');
+    let includeInEtdCheckbox = document.getElementById('includeInEtdCheckbox');
 
+    // Set up form
+    formHeader.innerText = "Edit Task/Document";
+    editButton.style.display = "block";
+    createButton.style.display = "none";
+
+    // Get item identifier from table
+    let rowIndex = cell.parentElement.rowIndex - 1;
+    let itemTableText = (itemTableBody.innerText).split('\n');
+    let itemDetails = itemTableText[rowIndex*3].split("\t");
+    let itemIdentifier = itemDetails[0];
+
+    // Get full item details
+    let projectInformation = FindProjectInJson();
+    let parsedItems = projectInformation.Items;
+    let item;
+    for (let i = parsedItems.length - 1; i >= 0; i--) {
+        if (parsedItems[i].name == itemIdentifier) {
+            item = parsedItems[i];
+        }
+    }
+
+    // Add current details to form
+    itemName.value = item.name;
+    itemName.disabled = true;
+    approvalNeededCheckbox.checked = item.approval_needed;
+    
+    let timeInformation = item.time_allocated.split(' ');
+    itemLegnth.value = timeInformation[0];
+    itemTimeframe.value = timeInformation[1];
+
+    includeInEtdCheckbox.checked = item.include_in_etd;
+}
+
+function EditItem() {
+    // Html elements
+    let itemTableBody = document.getElementById('item-table-body');
+    let itemName = document.getElementById('itemName');
+    let approvalNeeded = document.getElementById('approvalNeededCheckbox');
+    let timeLengthAllocated = document.getElementById('itemLegnth');
+    let timeframeAllocated = document.getElementById('itemTimeframe');
+    let includeInEdt = document.getElementById('includeInEtdCheckbox');
+
+    // Get current details
+    let projectInformation = FindProjectInJson();
+    let parsedItems = projectInformation.Items;
+    for (let i = parsedItems.length - 1; i >= 0; i--) {
+        if (parsedItems[i].name == itemName.value) {
+            parsedItems[i].approval_needed = approvalNeeded.checked;
+            parsedItems[i].time_allocated = `${timeLengthAllocated.value} ${timeframeAllocated.value}`;
+            parsedItems[i].include_in_etd = includeInEdt.checked;
+        }
+    }
+
+    projectInformation.Items = parsedItems;
+
+    UpdateProjectsInformation(projectInformation);
+    
+    itemTableBody.innerHTML = '';
+    PopulateItemTable(FindProjectInJson());
 }
 
 // Add function to date to allow ability to add and remove days

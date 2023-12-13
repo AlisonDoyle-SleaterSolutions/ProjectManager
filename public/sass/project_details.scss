@@ -6,11 +6,12 @@
 
 main {
     max-height: 10vh;
+    padding: 2rem;
 }
 
 .row {
-    height: 87vh;
-    max-height: 87vh;
+    height: 92vh;
+    max-height: 90vh;
 }
 
 .card {
@@ -26,6 +27,11 @@ main {
         color: gray;
         font-size: 1.2rem;
         font-weight: 600;
+    }
+
+    #due-date {
+        margin: 1rem auto;
+        width: fit-content;
     }
 }
 
