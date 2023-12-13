@@ -155,16 +155,20 @@ function FindProjectInJson() {
     return projectInformation;
 }
 
-function ShowNewItemForm() {
+function ShowNewItemForm(formTitle) {
     // alert("In ShowNewItemForm() Function");
 
     // Html elements
     let formContainer = document.getElementById("new-item-form-container");
     let contentCover = document.getElementById("main-content-cover");
+    let formHeader = document.getElementById('item-form-name');
 
     // Show form
     formContainer.style.display = "block";
     contentCover.style.display = "block";
+
+    // Set appropriate header
+    formHeader.innerText = formTitle;
 }
 
 function HideNewItemForm() {
@@ -504,7 +508,10 @@ function ItemStats(projectItems) {
 function OpenItemEditor(cell) {
     // alert("In OpenItemEditor() funtion")
 
-    ShowNewItemForm();
+    ShowNewItemForm("Edit Task/Document");
+
+    // Html elements
+    let formHeader = document.getElementById('item-form-name');
 
 }
 
