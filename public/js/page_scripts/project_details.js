@@ -119,14 +119,11 @@ function CreateTableItem(item, statusInformation) {
 
     // Control buttons
     let nextStageButtonText = "";
-    let buttonWidth = "fit-content";
+    let buttonWidth = "220px";
     if (item.status == "Not Started") {
         nextStageButtonText = "Mark as 'In Progress'";
     } else if (item.status == "In Progress" && item.approval_needed == true) {
         nextStageButtonText = "Mark as 'Pending Review'";
-    }
-    else if (item.status == "Completed") {
-        buttonWidth = "172px"
     } else {
         nextStageButtonText = "Mark as 'Completed'";
     }
@@ -606,6 +603,8 @@ function EditItem() {
     // Get current details
     let projectInformation = FindProjectInJson();
     let parsedItems = projectInformation.Items;
+
+    // Set new values
     for (let i = parsedItems.length - 1; i >= 0; i--) {
         if (parsedItems[i].name == itemName.value) {
             parsedItems[i].approval_needed = approvalNeeded.checked;
@@ -614,12 +613,43 @@ function EditItem() {
         }
     }
 
+    // Estimate new due date
+    let newDueDate = new Date(projectInformation.CreationDate);
+    let daysNeededToCompleteProject = 0;
+
+    for (let i = 0; i < parsedItems.length; i++) {
+        // Check if item should be included in estimated due date
+        if (parsedItems[i].include_in_etd === true) {
+            let allocatedTime = parsedItems[i].time_allocated.split(" ");
+            let timeframeLength = parseInt(allocatedTime[0]);
+            let timeframe = allocatedTime[1];
+
+            // Convert time frame to days
+            let timeframeDays = 1;
+            if (timeframe == "Month(s)") {
+                timeframeDays = 28;
+            } else if (timeframe == "Week(s)") {
+                timeframeDays = 7;
+            }
+
+            // Add number of days for item to total
+            let daysRequired = timeframeLength * timeframeDays;
+            daysNeededToCompleteProject += daysRequired;
+        }
+    }
+    newDueDate = newDueDate.addDays(daysNeededToCompleteProject);
+
     projectInformation.Items = parsedItems;
+    projectInformation.DueDate = newDueDate;
 
     UpdateProjectsInformation(projectInformation);
 
+    document.getElementById("due-date").innerText = newDueDate.toLocaleDateString();
+
     itemTableBody.innerHTML = '';
     PopulateItemTable(FindProjectInJson());
+
+    HideNewItemForm();
 }
 
 function UpdateStatus(cell) {
