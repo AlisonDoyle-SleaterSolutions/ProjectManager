@@ -211,7 +211,7 @@ function CreateItem() {
         let includeInEtd = document.getElementById("includeInEtdCheckbox").checked == true ? "Yes" : "No";
 
         // Format item for table
-        let newItem = `<tr><td>${itemName}</td><td>${approvalNeeded}</td><td>${timeAllocated}</td><td>${includeInEtd}</td><td class="delete-item-column"><button class="btn btn-outline-danger delete-item-button" type="button" onclick="DeleteItem(this.parentElement)"><i class="bi bi-trash"></i></button></td></tr>`;
+        let newItem = `<tr><td>${itemName}</td><td>${approvalNeeded}</td><td>${timeAllocated}</td><td>${includeInEtd}</td><td class="delete-item-column"><button class="btn btn-outline-danger delete-item-button" type="button" onclick="DeleteItem(this.parentElement)"><i class="bi bi-trash-fill"></i></button></td></tr>`;
 
         // Add item to table
         let itemTableBody = document.getElementById("itemTableBody");
