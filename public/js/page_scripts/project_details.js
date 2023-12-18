@@ -92,6 +92,7 @@ function PopulateItemTable(projectInformation) {
     inProgressCount.innerText = inProgress;
     pendingCount.innerText = pendingReview;
     completedCount.innerText = completed;
+
 }
 
 function CreateTableItem(item, statusInformation) {
@@ -616,7 +617,7 @@ function UpdateStatus(cell) {
     let itemTableBody = document.getElementById("item-table-body");
 
     // Get identifier of item to update status of
-    let itemTableText = (itemTableBody.innerText).split("\n"); 
+    let itemTableText = (itemTableBody.innerText).split("\n");
     for (let i = itemTableText.length; i >= 0; i--) {
         if (itemTableText[i] == "" || (itemTableText[i] == "Mark as 'Completed'") || (itemTableText[i] == "Mark as 'In Progress'") || (itemTableText[i] == "Mark as 'Pending Review'")) {
             itemTableText.splice(i, 1);
