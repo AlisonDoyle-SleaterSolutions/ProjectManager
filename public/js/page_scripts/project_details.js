@@ -117,9 +117,23 @@ function CreateTableItem(item, statusInformation) {
     controlsCell.style.justifyContent = "space-evenly"
 
     // Control buttons
+    let nextStageButtonText = "";
+    let buttonWidth = "fit-content";
+    if (item.status == "Not Started") {
+        nextStageButtonText = "Mark as 'In Progress'";
+    } else if (item.status == "In Progress" && item.approval_needed == true) {
+        nextStageButtonText = "Mark as 'Pending Review'";
+    }
+    else if (item.status == "Completed") {
+        buttonWidth = "172px"
+    } else {
+        nextStageButtonText = "Mark as 'Completed'";
+    }
+
     let nextStageButton = document.createElement('button');
     nextStageButton.classList.add('btn');
-    nextStageButton.innerText = "Mark as 'stagename'"
+    nextStageButton.innerText = nextStageButtonText;
+    nextStageButton.style.width = buttonWidth;
     nextStageButton.onclick = function () { UpdateStatus(this.parentElement) };
 
     let editButton = document.createElement('button');
@@ -482,7 +496,7 @@ function CreateChart(projectItems) {
         ]
     });
 
-    projectChart  = canvas;
+    projectChart = canvas;
 
     canvasWrapper.appendChild(canvas);
 
@@ -602,8 +616,14 @@ function UpdateStatus(cell) {
     let itemTableBody = document.getElementById("item-table-body");
 
     // Get identifier of item to update status of
-    let itemTableText = (itemTableBody.innerText).split("\n");
-    let itemDetails = itemTableText[rowIndex * 3].split("\t");
+    let itemTableText = (itemTableBody.innerText).split("\n"); 
+    for (let i = itemTableText.length; i >= 0; i--) {
+        if (itemTableText[i] == "" || (itemTableText[i] == "Mark as 'Completed'") || (itemTableText[i] == "Mark as 'In Progress'") || (itemTableText[i] == "Mark as 'Pending Review'")) {
+            itemTableText.splice(i, 1);
+        }
+    }
+    console.log(itemTableText)
+    let itemDetails = itemTableText[rowIndex].split("\t");
     let itemIdentifier = itemDetails[0];
 
     // Replace details of project
@@ -615,14 +635,6 @@ function UpdateStatus(cell) {
 
             if (nextStage != null) {
                 parsedItems[i].status = nextStage;
-
-                if ((currentStage == "In Progress") && (approvalSetting === true)) {
-                    nextStage = "Pending Review"
-                } else if (currentStage == "In Progress") {
-                    nextStage = "Completed"
-                } else if (currentStage == "Pending Review") {
-                    nextStage = "Completed"
-                }
             }
         }
     }
