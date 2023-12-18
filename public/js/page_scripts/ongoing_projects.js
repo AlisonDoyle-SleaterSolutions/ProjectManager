@@ -4,9 +4,7 @@ import "https://cdn.jsdelivr.net/npm/chart.js";
 
 (function () {
     // Initialising projects if there is no data
-    if (localStorage.getItem("Projects") == null) {
-        localStorage.setItem("Projects", JSON.stringify([]));
-    }
+    CreateDummyData();
 
     // Populating page w/ projects
     PopulateDisplayWithProjects();
@@ -14,6 +12,14 @@ import "https://cdn.jsdelivr.net/npm/chart.js";
     // Adding event listeners
     document.getElementById("create-new-project").addEventListener('click', RedirectToProjectCreation, false);
 }())
+
+function CreateDummyData() {
+    const sampleData = '[{"ProjectNumber":"1410131223","ProjectName":"Sample Project","CompanyName":"Sleater & Co.","Items":[{"name":"Quote","approval_needed":false,"time_allocated":"2 Week(s)","include_in_etd":false,"status":"Completed"},{"name":"Design 1","approval_needed":true,"time_allocated":"2 Month(s)","include_in_etd":true,"status":"Pending Review"},{"name":"Design 2","approval_needed":false,"time_allocated":"2 Week(s)","include_in_etd":true,"status":"In Progress"},{"name":"Production","approval_needed":false,"time_allocated":"1 Month(s)","include_in_etd":true,"status":"In Progress"},{"name":"Installation","approval_needed":false,"time_allocated":"1 Month(s)","include_in_etd":false,"status":"Not Started"},{"name":"Invoice","approval_needed":false,"time_allocated":"3 Month(s)","include_in_etd":false,"status":"Not Started"}],"CreationDate":"2023-12-13T14:12:13.886Z","DueDate":"2024-03-20T14:12:13.886Z"}]';
+
+    if (!localStorage["Projects"]) {
+        localStorage.setItem("Projects", sampleData)
+    }
+}
 
 function PopulateDisplayWithProjects() {
     const ProjectLocalStorageName = "Projects";
@@ -25,25 +31,43 @@ function PopulateDisplayWithProjects() {
     let projectsInformation = JSON.parse(localStorage.getItem(ProjectLocalStorageName));
 
     for (let i = 0; i < projectsInformation.length; i++) {
-        // Creating IDs for charts
-        let canvasId = projectsInformation[i].ProjectName.replace(" ", "-") + "-Canvas";
 
-        // Formating project card
-        let projectCard = `
-        <div class="col-12 col-md-6 col-lg-6 col-xl-3">
-            <div class="card project-card" onclick="RedirectToProjectDetails()">
-                <h2 class="card-title">${projectsInformation[i].ProjectName}</h2>
-                <h3 class="card-subtitle mb-2 text-body-secondary"><span class="project-number text-body-secondary">(${projectsInformation[i].ProjectNumber}) - </span>${projectsInformation[i].CompanyName}</h3>
-                <div>
-                    <canvas id="${canvasId}"></canvas>
-                </div>
-                <h3 class="project-due-date">Due: </h3>
-            </div>
-        </div>`;
+        // Formatting date for card
+        let dueDate = new Date(projectsInformation[i].DueDate);
+        dueDate = dueDate.toLocaleDateString();
 
-        cardContainer.innerHTML += projectCard;
+        // Creating card elements
+        let projectCardContainer = document.createElement('div');
+        projectCardContainer.classList.add('col-12', 'col-md-6', 'col-lg-6', 'col-xl-3');
 
-        CreateChart(canvasId);
+        let projectCard = document.createElement('div');
+        projectCard.id = `${projectsInformation[i].ProjectNumber}-card`;
+        projectCard.classList.add('card', 'project-card');
+        projectCard.onclick = function () { RedirectToProjectDetails(this) };
+
+        let cardTitle = document.createElement('h2');
+        cardTitle.classList.add('card-title');
+        cardTitle.innerText = projectsInformation[i].ProjectName;
+
+        let cardSubtitle = document.createElement('h3');
+        cardSubtitle.classList.add('card-subtitle', 'mb-2', 'text-body-secondary');
+        cardSubtitle.innerHTML += `<span class="project-number text-body-secondary">(${projectsInformation[i].ProjectNumber}) - </span>${projectsInformation[i].CompanyName}`;
+
+        let chart = CreateChart(projectsInformation[i].Items);
+
+        let cardDueDate = document.createElement('h3');
+        cardDueDate.classList.add('project-due-date');
+        cardDueDate.innerText = `Due: ${dueDate}`;
+
+        // Combining card elements
+        projectCard.appendChild(cardTitle);
+        projectCard.appendChild(cardSubtitle);
+        projectCard.appendChild(chart);
+        projectCard.appendChild(cardDueDate);
+
+        projectCardContainer.appendChild(projectCard);
+
+        cardContainer.appendChild(projectCardContainer);
     }
 }
 
@@ -57,28 +81,34 @@ function RedirectToProjectCreation() {
     createNewProjectButton.href = NewProjectPage;
 }
 
-function CreateChart(chartId) {
-    // Html elements
-    let chart = document.getElementById(chartId);
+function CreateChart(projectItems) {
+    let canvas = document.createElement('canvas');
+    canvas.style.maxHeight = "20rem";
 
-    
-    const projectPercentage = "56%"
+    let itemStats = ItemStats(projectItems);
+    let totalItems = 0;
+    itemStats.map((noItemInStage) => {
+        totalItems += noItemInStage;
+    })
+    let completion = (itemStats[3] / totalItems) * 100;
 
-    // Chart dummy data
-    let dummyData = {
+    // Chart data
+    let projectData = {
         labels: [
-            "Not Started/Missing Documents",
-            "In Progress/Waiting Approval",
+            "Not Started",
+            "In Progress",
+            "Pending Review",
             "Completed"
         ],
         datasets: [{
-            data: [3, 5, 1],
+            data: itemStats,
             borderWidth: 1,
-            backgroundColor: ["#FF5733", "#FFC300", "#9FE2BF"],
+            backgroundColor: ["#dc3545", "#fd7e14", "#ffc107", "#198754"],
             cutout: "76%"
         }]
     };
 
+    // Chart central percentage
     const projectCompletionPercentage = {
         id: 'percentage',
         beforeDraw(chart, args, options) {
@@ -92,14 +122,14 @@ function CreateChart(chartId) {
             ctx.font = '2rem sans-serif';
             ctx.textAlign = "center";
             ctx.textStyle = "black";
-            ctx.fillText(projectPercentage, centerPointXAxisValue, centerPointYAxisValue);
+            ctx.fillText(`${completion.toFixed(0)}%`, centerPointXAxisValue, centerPointYAxisValue);
         }
     };
 
     // Creating chart
-    new Chart(chart, {
+    new Chart(canvas, {
         type: 'doughnut',
-        data: dummyData,
+        data: projectData,
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -114,4 +144,35 @@ function CreateChart(chartId) {
         ]
     });
 
+    return canvas
+}
+
+function ItemStats(projectItems) {
+    let notStarted = 0;
+    let inProgress = 0;
+    let pendingReview = 0;
+    let completed = 0;
+
+    let numberOfItemsInEachStage = [];
+
+    for (let i = 0; i < projectItems.length; i++) {
+        switch (projectItems[i].status) {
+            case "Not Started":
+                notStarted++;
+                break;
+            case "In Progress":
+                inProgress++;
+                break;
+            case "Pending Review":
+                pendingReview++;
+                break;
+            default:
+                completed++;
+                break;
+        }
+    }
+
+    numberOfItemsInEachStage = [notStarted, inProgress, pendingReview, completed];
+
+    return numberOfItemsInEachStage;
 }
