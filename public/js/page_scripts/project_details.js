@@ -118,20 +118,22 @@ function CreateTableItem(item, statusInformation) {
     controlsCell.style.justifyContent = "space-evenly"
 
     // Control buttons
+    let nextStageButton = document.createElement('button');
     let nextStageButtonText = "";
-    let buttonWidth = "220px";
     if (item.status == "Not Started") {
         nextStageButtonText = "Mark as 'In Progress'";
     } else if (item.status == "In Progress" && item.approval_needed == true) {
         nextStageButtonText = "Mark as 'Pending Review'";
+    } else if (item.status == "Completed") {
+        nextStageButtonText = "";
+        nextStageButton.setAttribute('disabled', true);
     } else {
         nextStageButtonText = "Mark as 'Completed'";
     }
 
-    let nextStageButton = document.createElement('button');
-    nextStageButton.classList.add('btn');
+    nextStageButton.classList.add('btn', 'btn-outline-secondary');
     nextStageButton.innerText = nextStageButtonText;
-    nextStageButton.style.width = buttonWidth;
+    nextStageButton.style.width = "220px";
     nextStageButton.onclick = function () { UpdateStatus(this.parentElement) };
 
     let editButton = document.createElement('button');
