@@ -278,6 +278,11 @@ function DeleteItem(cell) {
 
     // Get identifier of item to delete
     let itemTableText = (itemTableBody.innerText).split("\n");
+    for (let i = itemTableText.length; i >= 0; i--) {
+        if (itemTableText[i] == "" || (itemTableText[i] == "Mark as 'Completed'") || (itemTableText[i] == "Mark as 'In Progress'") || (itemTableText[i] == "Mark as 'Pending Review'")) {
+            itemTableText.splice(i, 1);
+        }
+    }
     let itemDetails = itemTableText[rowIndex].split("\t");
     let itemIdentifier = itemDetails[0];
 
@@ -290,7 +295,9 @@ function DeleteItem(cell) {
     let newDueDate = new Date(projectInformation.DueDate);
     for (let i = parsedItems.length - 1; i >= 0; i--) {
         if (parsedItems[i].name == itemIdentifier) {
-            newDueDate = newDueDate.addDays(GetDaysToCompleteProject(parsedItems[i].time_allocated) * -1);
+            if ((parsedItems[i].include_in_etd == true)) {
+                newDueDate = newDueDate.addDays(GetDaysToCompleteProject(parsedItems[i].time_allocated) * -1);
+            }
             parsedItems.splice(i, 1);
         }
     }
@@ -557,10 +564,14 @@ function OpenItemEditor(cell) {
 
     // Get item identifier from table
     let rowIndex = cell.parentElement.rowIndex - 1;
-    let itemTableText = (itemTableBody.innerText).split('\n');
-    let itemDetails = itemTableText[rowIndex * 3].split("\t");
+    let itemTableText = (itemTableBody.innerText).split("\n");
+    for (let i = itemTableText.length; i >= 0; i--) {
+        if (itemTableText[i] == "" || (itemTableText[i] == "Mark as 'Completed'") || (itemTableText[i] == "Mark as 'In Progress'") || (itemTableText[i] == "Mark as 'Pending Review'")) {
+            itemTableText.splice(i, 1);
+        }
+    }
+    let itemDetails = itemTableText[rowIndex].split("\t");
     let itemIdentifier = itemDetails[0];
-
     // Get full item details
     let projectInformation = FindProjectInJson();
     let parsedItems = projectInformation.Items;
@@ -623,7 +634,6 @@ function UpdateStatus(cell) {
             itemTableText.splice(i, 1);
         }
     }
-    console.log(itemTableText)
     let itemDetails = itemTableText[rowIndex].split("\t");
     let itemIdentifier = itemDetails[0];
 
