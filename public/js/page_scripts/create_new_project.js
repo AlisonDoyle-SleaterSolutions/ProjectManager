@@ -16,53 +16,59 @@ function CreateProject() {
 
     // Get project items
     let projectItems = FetchProjectItems();
-    let projectItemsInJsonFormat = ConvertProjectItemsToJson(projectItems);
+    if (projectItems[0].length != 0) {
+        let projectItemsInJsonFormat = ConvertProjectItemsToJson(projectItems);
 
-    // Calcualte project due date
-    let dateOfCreation = new Date();
-    let daysNeededToCompleteProject = 0;
+        // Calcualte project due date
+        let dateOfCreation = new Date();
+        let daysNeededToCompleteProject = 0;
 
-    for (let i = 0; i < projectItems.length; i++) {
-        // Check if item should be included in estimated due date
-        if (projectItems[i][3] === "Yes") {
-            let allocatedTime = projectItems[i][2].split(" ");
-            let timeframeLength = parseInt(allocatedTime[0]);
-            let timeframe = allocatedTime[1];
+        for (let i = 0; i < projectItems.length; i++) {
+            // Check if item should be included in estimated due date
+            if (projectItems[i][3] === "Yes") {
+                let allocatedTime = projectItems[i][2].split(" ");
+                let timeframeLength = parseInt(allocatedTime[0]);
+                let timeframe = allocatedTime[1];
 
-            // Convert time frame to days
-            let timeframeDays = 1;
-            if (timeframe == "Month(s)") {
-                timeframeDays = 28;
-            } else if (timeframe == "Week(s)") {
-                timeframeDays = 7;
+                // Convert time frame to days
+                let timeframeDays = 1;
+                if (timeframe == "Month(s)") {
+                    timeframeDays = 28;
+                } else if (timeframe == "Week(s)") {
+                    timeframeDays = 7;
+                }
+
+                // Add number of days for item to total
+                let daysRequired = timeframeLength * timeframeDays;
+                daysNeededToCompleteProject += daysRequired;
             }
+        }
 
-            // Add number of days for item to total
-            let daysRequired = timeframeLength * timeframeDays;
-            daysNeededToCompleteProject += daysRequired;
+        let dueDate = dateOfCreation.addDays(daysNeededToCompleteProject);
+        console.log(dueDate);
+
+        // Formating data for local storage
+        let projectInformation = {
+            "ProjectNumber": projectNumber,
+            "ProjectName": projectName,
+            "CompanyName": companyName,
+            "Items": projectItemsInJsonFormat,
+            "CreationDate": dateOfCreation,
+            "DueDate": dueDate
+        };
+
+        // Adding project to localstorage if possible
+        let projectsExists = CheckIfProjectExists(projectNumber)
+        if (projectsExists == false) {
+            AppendProjectToLocalStorage(projectInformation);
+        } else {
+            DisplayError("A project with that number already exists. Please choose a different number.", "E")
+            projectCreationWasSuccessful = false;
         }
     }
-
-    let dueDate = dateOfCreation.addDays(daysNeededToCompleteProject);
-    console.log(dueDate);
-
-    // Formating data for local storage
-    let projectInformation = {
-        "ProjectNumber": projectNumber,
-        "ProjectName": projectName,
-        "CompanyName": companyName,
-        "Items": projectItemsInJsonFormat,
-        "CreationDate": dateOfCreation,
-        "DueDate": dueDate
-    };
-
-    // Adding project to localstorage if possible
-    let projectsExists = CheckIfProjectExists(projectNumber)
-    if (projectsExists == false) {
-        AppendProjectToLocalStorage(projectInformation);
-    } else {
-        DisplayError("A project with that number already exists. Please choose a different number.", "E")
+    else {
         projectCreationWasSuccessful = false;
+        DisplayError("Please create at least 1 task/document for your project", "e");
     }
 
     // Returning action if successful

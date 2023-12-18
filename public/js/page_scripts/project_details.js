@@ -92,6 +92,7 @@ function PopulateItemTable(projectInformation) {
     inProgressCount.innerText = inProgress;
     pendingCount.innerText = pendingReview;
     completedCount.innerText = completed;
+
 }
 
 function CreateTableItem(item, statusInformation) {
@@ -117,23 +118,22 @@ function CreateTableItem(item, statusInformation) {
     controlsCell.style.justifyContent = "space-evenly"
 
     // Control buttons
+    let nextStageButton = document.createElement('button');
     let nextStageButtonText = "";
-    let buttonWidth = "fit-content";
     if (item.status == "Not Started") {
         nextStageButtonText = "Mark as 'In Progress'";
     } else if (item.status == "In Progress" && item.approval_needed == true) {
         nextStageButtonText = "Mark as 'Pending Review'";
-    }
-    else if (item.status == "Completed") {
-        buttonWidth = "172px"
+    } else if (item.status == "Completed") {
+        nextStageButtonText = "";
+        nextStageButton.setAttribute('disabled', true);
     } else {
         nextStageButtonText = "Mark as 'Completed'";
     }
 
-    let nextStageButton = document.createElement('button');
-    nextStageButton.classList.add('btn');
+    nextStageButton.classList.add('btn', 'btn-outline-secondary');
     nextStageButton.innerText = nextStageButtonText;
-    nextStageButton.style.width = buttonWidth;
+    nextStageButton.style.width = "220px";
     nextStageButton.onclick = function () { UpdateStatus(this.parentElement) };
 
     let editButton = document.createElement('button');
@@ -277,6 +277,11 @@ function DeleteItem(cell) {
 
     // Get identifier of item to delete
     let itemTableText = (itemTableBody.innerText).split("\n");
+    for (let i = itemTableText.length; i >= 0; i--) {
+        if (itemTableText[i] == "" || (itemTableText[i] == "Mark as 'Completed'") || (itemTableText[i] == "Mark as 'In Progress'") || (itemTableText[i] == "Mark as 'Pending Review'")) {
+            itemTableText.splice(i, 1);
+        }
+    }
     let itemDetails = itemTableText[rowIndex].split("\t");
     let itemIdentifier = itemDetails[0];
 
@@ -289,7 +294,9 @@ function DeleteItem(cell) {
     let newDueDate = new Date(projectInformation.DueDate);
     for (let i = parsedItems.length - 1; i >= 0; i--) {
         if (parsedItems[i].name == itemIdentifier) {
-            newDueDate = newDueDate.addDays(GetDaysToCompleteProject(parsedItems[i].time_allocated) * -1);
+            if ((parsedItems[i].include_in_etd == true)) {
+                newDueDate = newDueDate.addDays(GetDaysToCompleteProject(parsedItems[i].time_allocated) * -1);
+            }
             parsedItems.splice(i, 1);
         }
     }
@@ -556,10 +563,14 @@ function OpenItemEditor(cell) {
 
     // Get item identifier from table
     let rowIndex = cell.parentElement.rowIndex - 1;
-    let itemTableText = (itemTableBody.innerText).split('\n');
-    let itemDetails = itemTableText[rowIndex * 3].split("\t");
+    let itemTableText = (itemTableBody.innerText).split("\n");
+    for (let i = itemTableText.length; i >= 0; i--) {
+        if (itemTableText[i] == "" || (itemTableText[i] == "Mark as 'Completed'") || (itemTableText[i] == "Mark as 'In Progress'") || (itemTableText[i] == "Mark as 'Pending Review'")) {
+            itemTableText.splice(i, 1);
+        }
+    }
+    let itemDetails = itemTableText[rowIndex].split("\t");
     let itemIdentifier = itemDetails[0];
-
     // Get full item details
     let projectInformation = FindProjectInJson();
     let parsedItems = projectInformation.Items;
@@ -594,6 +605,8 @@ function EditItem() {
     // Get current details
     let projectInformation = FindProjectInJson();
     let parsedItems = projectInformation.Items;
+
+    // Set new values
     for (let i = parsedItems.length - 1; i >= 0; i--) {
         if (parsedItems[i].name == itemName.value) {
             parsedItems[i].approval_needed = approvalNeeded.checked;
@@ -602,12 +615,43 @@ function EditItem() {
         }
     }
 
+    // Estimate new due date
+    let newDueDate = new Date(projectInformation.CreationDate);
+    let daysNeededToCompleteProject = 0;
+
+    for (let i = 0; i < parsedItems.length; i++) {
+        // Check if item should be included in estimated due date
+        if (parsedItems[i].include_in_etd === true) {
+            let allocatedTime = parsedItems[i].time_allocated.split(" ");
+            let timeframeLength = parseInt(allocatedTime[0]);
+            let timeframe = allocatedTime[1];
+
+            // Convert time frame to days
+            let timeframeDays = 1;
+            if (timeframe == "Month(s)") {
+                timeframeDays = 28;
+            } else if (timeframe == "Week(s)") {
+                timeframeDays = 7;
+            }
+
+            // Add number of days for item to total
+            let daysRequired = timeframeLength * timeframeDays;
+            daysNeededToCompleteProject += daysRequired;
+        }
+    }
+    newDueDate = newDueDate.addDays(daysNeededToCompleteProject);
+
     projectInformation.Items = parsedItems;
+    projectInformation.DueDate = newDueDate;
 
     UpdateProjectsInformation(projectInformation);
 
+    document.getElementById("due-date").innerText = newDueDate.toLocaleDateString();
+
     itemTableBody.innerHTML = '';
     PopulateItemTable(FindProjectInJson());
+
+    HideNewItemForm();
 }
 
 function UpdateStatus(cell) {
@@ -616,13 +660,12 @@ function UpdateStatus(cell) {
     let itemTableBody = document.getElementById("item-table-body");
 
     // Get identifier of item to update status of
-    let itemTableText = (itemTableBody.innerText).split("\n"); 
+    let itemTableText = (itemTableBody.innerText).split("\n");
     for (let i = itemTableText.length; i >= 0; i--) {
         if (itemTableText[i] == "" || (itemTableText[i] == "Mark as 'Completed'") || (itemTableText[i] == "Mark as 'In Progress'") || (itemTableText[i] == "Mark as 'Pending Review'")) {
             itemTableText.splice(i, 1);
         }
     }
-    console.log(itemTableText)
     let itemDetails = itemTableText[rowIndex].split("\t");
     let itemIdentifier = itemDetails[0];
 
