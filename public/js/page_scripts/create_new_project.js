@@ -144,11 +144,14 @@ function ConvertProjectItemsToJson(items) {
             includeInEdt = true;
         }
 
+        alert(items);
+
         // Formating item information in json format
         let item = {
             "name": items[i][0],
             "approval_needed": approvalNeeded,
-            "time_allocated": items[i][2],
+            "type": items[i][2],
+            "time_allocated": items[i][3],
             "include_in_etd": includeInEdt,
             "status": "Not Started",
         }
@@ -207,11 +210,19 @@ function CreateItem() {
         // Get values from HTML
         let itemName = document.getElementById("itemName").value;
         let approvalNeeded = document.getElementById("approvalNeededCheckbox").checked == true ? "Yes" : "No";
+        let itemTypes = document.querySelectorAll('input[name="itemType"]');
+        let selectedType;
+        for (const radioButton of itemTypes) {
+            if (radioButton.checked) {
+                selectedType = radioButton.value;
+                break;
+            }
+        }
         let timeAllocated = `${document.getElementById("itemLegnth").value} ${document.getElementById("itemTimeframe").value}`;
         let includeInEtd = document.getElementById("includeInEtdCheckbox").checked == true ? "Yes" : "No";
 
         // Format item for table
-        let newItem = `<tr><td>${itemName}</td><td>${approvalNeeded}</td><td>${timeAllocated}</td><td>${includeInEtd}</td><td class="delete-item-column"><button class="btn btn-outline-danger delete-item-button" type="button" onclick="DeleteItem(this.parentElement)"><i class="bi bi-trash-fill"></i></button></td></tr>`;
+        let newItem = `<tr><td>${itemName}</td><td>${approvalNeeded}</td><td>${selectedType}</td><td>${timeAllocated}</td><td>${includeInEtd}</td><td class="delete-item-column"><button class="btn btn-outline-danger delete-item-button" type="button" onclick="DeleteItem(this.parentElement)"><i class="bi bi-trash-fill"></i></button></td></tr>`;
 
         // Add item to table
         let itemTableBody = document.getElementById("itemTableBody");

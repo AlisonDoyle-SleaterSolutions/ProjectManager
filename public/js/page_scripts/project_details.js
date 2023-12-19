@@ -111,6 +111,12 @@ function CreateTableItem(item, statusInformation) {
 
     // File upload cell
     let fileUploadCell = document.createElement('td');
+    if (item.type == "Document") {
+        let fileManagerButton = document.createElement('button');
+        fileManagerButton.classList.add('btn', 'btn-outline-primary', 'bi', 'bi-archive-fill');
+        fileManagerButton.title = "Manage Files";
+        fileUploadCell.appendChild(fileManagerButton);
+    }
 
     // Control cell
     let controlsCell = document.createElement('td');
@@ -136,14 +142,17 @@ function CreateTableItem(item, statusInformation) {
     nextStageButton.style.width = "220px";
     nextStageButton.onclick = function () { UpdateStatus(this.parentElement) };
 
+    // Edit item button
     let editButton = document.createElement('button');
     editButton.classList.add('bi', 'bi-pencil-fill', 'btn', 'btn-outline-warning', 'edit-button', 'item-control');
     editButton.onclick = function () { OpenItemEditor(this.parentElement) };
 
+    // Delete item button
     let deleteButton = document.createElement('button');
     deleteButton.classList.add('bi', 'bi-trash-fill', 'btn', 'btn-outline-danger', 'item-control');
     deleteButton.onclick = function () { DeleteItem(this.parentElement) };
 
+    // Appending item control buttons to control cell
     controlsCell.appendChild(nextStageButton);
     controlsCell.appendChild(editButton);
     controlsCell.appendChild(deleteButton);
@@ -152,7 +161,7 @@ function CreateTableItem(item, statusInformation) {
     newItem.appendChild(nameCell);
     newItem.appendChild(timeCell);
     newItem.appendChild(statusCell);
-    // newItem.appendChild(fileUploadCell);
+    newItem.appendChild(fileUploadCell);
     newItem.appendChild(controlsCell);
 
     return newItem;
@@ -262,6 +271,13 @@ function CreateItem() {
         PopulateItemTable(projectInformation);
 
         document.getElementById('due-date').innerText = `Due: ${newDueDate.toLocaleDateString()}`;
+
+        // Clear form
+        document.getElementById("itemName").value = "";
+        document.getElementById("approvalNeededCheckbox").checked = false;
+        document.getElementById("itemLegnth").value = "";
+        document.getElementById("itemTimeframe").value = "Select Timeframe";
+        document.getElementById("includeInEtdCheckbox").checked = false;
     }
 
     // Stop form from reseting page

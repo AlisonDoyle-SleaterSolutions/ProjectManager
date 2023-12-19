@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="">
 
 <head>
     <meta charset="UTF-8">
@@ -106,21 +106,24 @@
                         <button class="btn btn-primary mb-1" id="new-item-button">New Task/Document</button>
 
                         <!-- Item details table -->
-                        <table class="table">
-                            <thead>
-                                <th>Name</th>
-                                <th>Time Allocated</th>
-                                <th>Status</th>
-                                <th></th>
-                            </thead>
-                            <tbody id="item-table-body">
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <th>Name</th>
+                                    <th>Time Allocated</th>
+                                    <th style="min-width: 200px;">Status</th>
+                                    <th>Files</th>
+                                    <th></th>
+                                </thead>
+                                <tbody id="item-table-body">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Add new item to project -->
+            <!-- Add/Edit item to project -->
             <div class="card center-xy" id="new-item-form-container">
                 <h1 id="item-form-name"></h1>
                 <form onsubmit="return CreateItem()">

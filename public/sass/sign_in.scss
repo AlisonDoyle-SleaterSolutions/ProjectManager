@@ -1,0 +1,25 @@
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+main {
+    background-image: url('./../resources/images/sign-in-background.jpg');
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    position: fixed;
+    top: 0%;
+    width: 100%;
+    z-index: -1;
+
+    .card {
+        padding: 2rem;
+        margin: auto;
+        text-align: center;
+        top: 25%;
+        min-width: fit-content;
+        max-width: 32rem;
+    
+        .mb-2 {
+            text-align: left;
+        }  
+    }
+}

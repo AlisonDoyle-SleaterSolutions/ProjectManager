@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -30,8 +30,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page"
-                                href="./ongoing_projects_dashboard.html">Ongoing Projects</a>
+                            <a class="nav-link" aria-current="page" href="./ongoing_projects_dashboard.html">Ongoing
+                                Projects</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="./archived_projects_dashboard.html">Archived Projects</a>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="col-md-6 mb-4">
                         <form class="card" method="get" onsubmit="return CreateItem()">
-                            <legend>Tasks/Documents</legend>
+                            <legend>Create Tasks/Documents</legend>
                             <label class="form-label mb-1" for="itemName">Task/Document Name*</label>
                             <input class="form-control mb-2" type="text" id="itemName" required>
                             <div class="form-check mb-2">
@@ -87,6 +87,23 @@
                                     data-bs-title="Have a 2nd party approve of an item before being able to be marked complete">
                                     ?
                                 </button>
+                            </div>
+                            <label class="form-label mb-1">Select Type:</label>
+                            <div class="mb-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="itemType"
+                                        id="flexRadioDisabled" required value="Task">
+                                    <label class="form-check-label" for="flexRadioDisabled">
+                                        Task
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="itemType"
+                                        id="flexRadioCheckedDisabled" value="Document">
+                                    <label class="form-check-label" for="flexRadioCheckedDisabled">
+                                        Document
+                                    </label>
+                                </div>
                             </div>
                             <label class="form-label mb-1">Time Allocated*</label>
                             <div class="input-group mb-2">
@@ -119,6 +136,7 @@
                                 <thead>
                                     <th>Task/Document Name</th>
                                     <th>Approval Needed</th>
+                                    <th>Type</th>
                                     <th>Time Allocated</th>
                                     <th>Include in ETD</th>
                                     <th class="delete-item-column">Delete</th>
@@ -134,7 +152,6 @@
                         <input class="btn btn-primary" type="submit" value="Create Project" form="project-details">
                     </div>
                 </div>
-
 
             </div>
 
