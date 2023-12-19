@@ -10,6 +10,8 @@ var projectChart;
     document.getElementById("main-content-cover").addEventListener('click', HideNewItemForm, false);
     document.getElementById("create-item-button").addEventListener('click', CreateItem, false);
     document.getElementById('edit-item-button').addEventListener('click', EditItem, false);
+    document.getElementById("main-content-cover").addEventListener('click', HideFileManger, false);
+    // document.getElementById('upload-file-button').addEventListener('click', ParseAndUplaodFile, false);
 
     PopulateProjectDetails();
 
@@ -115,7 +117,8 @@ function CreateTableItem(item, statusInformation) {
         let fileManagerButton = document.createElement('button');
         fileManagerButton.classList.add('btn', 'btn-outline-primary', 'bi', 'bi-archive-fill');
         fileManagerButton.title = "Manage Files";
-        fileUploadCell.appendChild(fileManagerButton);
+        fileManagerButton.onclick = function () { ShowFileManager() };
+        fileUploadCell.appendChild(fileManagerButton);   
     }
 
     // Control cell
@@ -721,6 +724,26 @@ function SelectNextStage(currentStage, approvalSetting) {
     }
 
     return nextStage;
+}
+
+function ShowFileManager() {
+    // Html elements
+    let formContainer = document.getElementById("file-manager");
+    let contentCover = document.getElementById("main-content-cover");
+
+    // Show form
+    formContainer.style.display = "block";
+    contentCover.style.display = "block";
+}
+
+function HideFileManger() {
+    // Html elements
+    let formContainer = document.getElementById("file-manager");
+    let contentCover = document.getElementById("main-content-cover");
+
+    // Hide form
+    formContainer.style.display = "none";
+    contentCover.style.display = "none";
 }
 
 // Add function to date to allow ability to add and remove days

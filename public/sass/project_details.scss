@@ -21,7 +21,7 @@ main {
     #project-name {
         font-size: 2rem;
     }
-    
+
     #project-number,
     #company-name {
         color: gray;
@@ -77,7 +77,7 @@ main {
 }
 
 #main-content-cover {
-    background-color: #131216;
+    background-color: $gray-800;
     display: none;
     height: 100vh;
     position: fixed;
@@ -102,7 +102,7 @@ main {
     border-radius: 12px;
     border: 1px solid $red;
     color: $red;
-    cursor:default;
+    cursor: default;
     padding: 0.2rem 0.4rem;
 }
 
@@ -111,7 +111,7 @@ main {
     border-radius: 12px;
     border: 1px solid $orange;
     color: $orange;
-    cursor:default;
+    cursor: default;
     padding: 0.2rem 0.4rem;
 }
 
@@ -135,4 +135,83 @@ main {
 
 .item-control {
     margin: auto 0.2rem;
+}
+
+#file-manager {
+    display: none;
+    height: fit-content;
+    max-width: 52rem;
+    min-width: fit-content;
+    position: fixed;
+    transform: translateY(-50%) translateX(-50%);
+    width: 50%;
+    z-index: 2;
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    button {
+        width: 12rem;
+    }
+
+    #file-upload {
+        background-color: $gray-200;
+        padding: 1rem;
+        margin: auto;
+        width: fit-content;
+    }
+
+    .file-waiting-approval {
+        background-color: #ffc10720;
+        border-radius: 12px;
+        border: 1px solid #CC9900;
+        color: #CC9900;
+        cursor: default;
+        font-size: 1rem;
+        margin-left: 1rem;
+        padding: 0.2rem 0.4rem;
+        position: absolute;
+        transform: translateY(12%);
+    }
+
+    .file-approved {
+        background-color: #19875420;
+        border-radius: 12px;
+        border: 1px solid $green;
+        color: $green;
+        cursor: default;
+        font-size: 1rem;
+        margin-left: 1rem;
+        padding: 0.2rem 0.4rem;
+        position: absolute;
+        transform: translateY(12%);
+    }
+
+    .file-denied {
+        background-color: #FF2E0020;
+        border-radius: 12px;
+        border: 1px solid $red;
+        color: $red;
+        cursor: default;
+        font-size: 1rem;
+        margin-left: 1rem;
+        padding: 0.2rem 0.4rem;
+        position: absolute;
+        transform: translateY(12%);
+    }
+
+    .file-controls {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        button {
+            min-width: fit-content;
+        }
+    }
 }

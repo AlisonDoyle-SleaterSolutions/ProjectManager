@@ -144,8 +144,6 @@ function ConvertProjectItemsToJson(items) {
             includeInEdt = true;
         }
 
-        alert(items);
-
         // Formating item information in json format
         let item = {
             "name": items[i][0],

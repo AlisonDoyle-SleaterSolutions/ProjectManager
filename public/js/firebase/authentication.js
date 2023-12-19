@@ -1,6 +1,6 @@
 // Import firebase libraries
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,22 +17,33 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Sign in user
-export function SignIn(email, password) {
+export function SignInUser(email, password) {
+    let signInErrorMessage = "";
+
     signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-        // Upon signing in
-        window.location.replace("./ongoing_projects_dashboard.min.html");
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-    });
-}
-// Sign out user
-export function SignOut() {
-    
+        .then((cred) => {
+            window.location.replace("./ongoing_projects_dashboard.html");
+        })
+        .catch((err) => {
+            let errorMessage;
+
+            if (err.code == "auth/user-not-found" || err.code == "auth/invalid-email" || err.code == "auth/wrong-password" || err.code=="auth/missing-password" || err.code == "auth/invalid-login-credentials") {
+                errorMessage = "Please check that your email/password has been entered correctly";
+            } else if (err.code == "auth/too-many-requests") {
+                errorMessage = "Your account had been temporarily locked due to too many failed log in attempts"
+            } else if (err.code == "auth/network-request-failed") {
+                errorMessage = "Unable to connect to server"
+            } else {
+                errorMessage = "Something went wrong: " + err.code;
+            }
+
+            
+        })
+
+    return signInErrorMessage;
 }
 
+// Sign out user
 
 // Create new user
 

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <link href="./../css/universal.css" rel="stylesheet">
     <link href="./../css/project_details.css" rel="stylesheet">
+    <link rel="stylesheet" href="./../css/dark_mode.css">
 </head>
 
 <body>
@@ -163,6 +164,26 @@
                 </form>
             </div>
 
+            <!-- Manage Files -->
+            <div class="card center-xy" id="file-manager">
+                <h1 class="mb-2">Manage Files</h1>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Upload new file:</label>
+                    <input class="form-control" type="file" id="formFile">
+                    <button class="btn btn-primary mt-2" id="upload-file-button"><i
+                        class="bi bi-upload"></i> Upload</button>
+                </div>
+                <p class="form-label">Current File:</p>
+                <div class="card">
+                    <h2>FileName.exe <span class="file-denied">Pending Approval</span></h2>
+                    <h3>Uploaded By: XYZ</h3>
+                    <h3>Upload Date: 19/12/2023</h3>
+                    <div class="file-controls mt-3">
+                        <button id="download-file-button" class="btn btn-outline-secondary"><i
+                                class="bi bi-download"></i> Download File</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>

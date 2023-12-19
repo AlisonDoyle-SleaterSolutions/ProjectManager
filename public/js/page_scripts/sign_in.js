@@ -1,11 +1,19 @@
-import { SignIn } from "../firebase/authentication.js";
+import { SignInUser } from "../firebase/authentication.js";
 
-// Event listeners
-document.getElementById('sign-in-form').addEventListener('click', SignInUser, false);
+(function(){
+    // Event listeners
+    document.getElementById('sign-in-form').addEventListener('submit', SignIn, false);
+}())
 
-export function SignInUser() {
+function SignIn() {
     let email = document.getElementById('email').value;
     let password = document.getElementById('password').value;
 
-    SignIn(email, password);
+    let result = SignInUser(email, password);
+
+    if (result != "") {
+        console.log(result);
+    }
+    
+    return false;
 }

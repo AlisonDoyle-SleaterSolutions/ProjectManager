@@ -1,0 +1,17 @@
+@import './../../node_modules/bootstrap/scss/bootstrap.scss';
+
+@include color-mode(dark) {
+    // Unique to on going projects dashboard
+    .search-and-filter-container {
+        background-color: $gray-800;
+    }
+
+    #projectCardsContainer {
+        .card:hover {
+            background-color: $gray-800;
+        }
+    }
+
+    // Unique to project details
+    
+}
