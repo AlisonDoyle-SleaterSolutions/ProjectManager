@@ -1,6 +1,6 @@
 // Import firebase libraries
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,17 +17,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Sign in user
-export function SignInUser(email, password) {
+function SignInUser(email, password) {
     let signInErrorMessage = "";
 
     signInWithEmailAndPassword(auth, email, password)
         .then((cred) => {
             window.location.replace("./ongoing_projects_dashboard.html");
+            console.log(cred.user);
         })
         .catch((err) => {
             let errorMessage;
 
-            if (err.code == "auth/user-not-found" || err.code == "auth/invalid-email" || err.code == "auth/wrong-password" || err.code=="auth/missing-password" || err.code == "auth/invalid-login-credentials") {
+            if (err.code == "auth/user-not-found" || err.code == "auth/invalid-email" || err.code == "auth/wrong-password" || err.code == "auth/missing-password" || err.code == "auth/invalid-login-credentials") {
                 errorMessage = "Please check that your email/password has been entered correctly";
             } else if (err.code == "auth/too-many-requests") {
                 errorMessage = "Your account had been temporarily locked due to too many failed log in attempts"
@@ -36,9 +37,7 @@ export function SignInUser(email, password) {
             } else {
                 errorMessage = "Something went wrong: " + err.code;
             }
-
-            
-        })
+        });
 
     return signInErrorMessage;
 }
@@ -46,5 +45,15 @@ export function SignInUser(email, password) {
 // Sign out user
 
 // Create new user
+function CreateNewUser(email, password) {
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // User signed up
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            console.log(error);
+        })
+}
 
 // Delete existing user

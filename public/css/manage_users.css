@@ -1,0 +1,12 @@
+main .card {
+  padding: 2rem;
+}
+main .card #top-bar select {
+  width: 100%;
+}
+main .card #top-bar input {
+  width: 100%;
+}
+main .card #top-bar button {
+  width: 100%;
+}/*# sourceMappingURL=manage_users.css.map */

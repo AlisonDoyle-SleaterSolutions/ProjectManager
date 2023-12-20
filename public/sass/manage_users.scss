@@ -1,0 +1,19 @@
+main {
+    .card {
+        padding: 2rem;
+
+        #top-bar {
+            select {
+                width: 100%;
+            }
+
+            input {
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    }
+}
